@@ -24,7 +24,7 @@ export const siteConfig = {
   name: "Wireframe Template",
   description:
     "A baseline for products that move quickly. Wireframe-stage scaffolding for teams that ship before the brand lands.",
-  url: "https://example.com",
+  url: "https://perac.to",
   ogImage: "/og-image.png",
   creator: "@yourhandle",
   locale: "en_US",

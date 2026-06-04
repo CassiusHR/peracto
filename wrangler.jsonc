@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "frame-wireframe",
+  "name": "peracto",
   "compatibility_date": "2026-06-04",
   // Static-only Astro build. No `main` / adapter is needed because every
   // route is pre-rendered to HTML at build time. Wrangler uploads the
