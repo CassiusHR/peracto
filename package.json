@@ -1,0 +1,43 @@
+{
+  "name": "rbp-wireframe-template",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "deploy": "astro build && wrangler deploy",
+    "cf:preview": "astro build && wrangler dev",
+    "cf:dry-run": "astro build && wrangler deploy --dry-run",
+    "astro": "astro",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,mjs,astro,json,css,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mjs,astro,json,css,md}\""
+  },
+  "dependencies": {
+    "@astrojs/react": "^4.4.0",
+    "@astrojs/sitemap": "^3.6.0",
+    "@tailwindcss/vite": "^4.1.18",
+    "astro": "^5.16.0",
+    "lenis": "^1.3.23",
+    "lucide-react": "^0.562.0",
+    "motion": "^12.38.0",
+    "ogl": "^1.0.11",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "tailwindcss": "^4.1.18"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "prettier": "^3.7.4",
+    "prettier-plugin-astro": "^0.14.1",
+    "prettier-plugin-tailwindcss": "^0.7.2",
+    "typescript": "^5",
+    "wrangler": "^4.97.0"
+  }
+}

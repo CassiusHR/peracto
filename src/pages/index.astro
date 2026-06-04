@@ -1,0 +1,274 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Reveal from "@/components/Reveal.astro";
+import SectionCorners from "@/components/SectionCorners.astro";
+import LogoMarquee from "@/components/LogoMarquee.astro";
+import FinalCTA from "@/components/FinalCTA.astro";
+import Footer from "@/components/Footer.astro";
+
+import { Header } from "@/components/header";
+import { DitherShader } from "@/components/dither-shader";
+import { Testimonials } from "@/components/testimonials";
+import { Showcase } from "@/components/showcase";
+import { Community } from "@/components/community";
+import { Pricing } from "@/components/pricing";
+import { Faq } from "@/components/faq";
+
+const heroStats = [
+  { label: "Components", value: "120+" },
+  { label: "Avg. Setup", value: "9 min" },
+  { label: "License", value: "Commercial" },
+];
+
+const scaffoldCards = [
+  {
+    title: "Skip the blank canvas",
+    body: "Routing, tokens, and layout primitives are wired before you write a line of feature code.",
+  },
+  {
+    title: "Designed to be overwritten",
+    body: "Every component is a placeholder you can tear out the moment your real system arrives.",
+  },
+  {
+    title: "Stays out of your way",
+    body: "No proprietary abstractions, no hidden magic — just the conventions your team already uses.",
+  },
+];
+
+const steps = [
+  {
+    title: "Clone and run",
+    body: "Pull the repo, install dependencies, and the dev server boots a working app on the first try — no setup steps, no missing env vars.",
+  },
+  {
+    title: "Swap the placeholders",
+    body: "Replace copy, components, and tokens at your own pace. Each surface is intentionally generic so your brand drops in without resistance.",
+  },
+  {
+    title: "Wire your real data",
+    body: "Routing and layout are already in place — point the templated views at your APIs and the structure carries the rest of the work.",
+  },
+  {
+    title: "Ship and iterate",
+    body: "Deploy on day one with a baseline that holds up to feedback, then evolve it as your product finds its real shape.",
+  },
+];
+---
+
+<Layout>
+  <Header client:load />
+  <main id="main-content" class="flex-1">
+    <section class="relative border-b border-border">
+      <div class="grid grid-cols-1 lg:grid-cols-2">
+        <div
+          class="flex min-h-130 flex-col justify-center px-6 py-16 sm:px-10 sm:py-20 lg:min-h-160 lg:border-r lg:border-border lg:px-14 lg:py-24"
+        >
+          <h1
+            style="--enter-delay: 380ms"
+            class="enter text-4xl font-medium leading-[1.05] tracking-tighter text-foreground sm:text-5xl lg:text-[4rem] xl:text-[5.5rem]"
+          >
+            A baseline for products that move quickly.
+          </h1>
+          <div
+            style="--enter-delay: 520ms"
+            class="enter mt-10 flex flex-wrap items-center gap-6"
+          >
+            <a
+              href="#start"
+              class="focus-ring inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-4 text-xs font-semibold uppercase tracking-[0.12em] text-background transition-opacity hover:opacity-90"
+            >
+              Get Started
+            </a>
+            <a
+              href="#why"
+              class="focus-ring inline-flex items-center gap-2 rounded-full px-2 py-3 text-xs font-semibold uppercase tracking-[0.12em] text-foreground transition-colors hover:text-muted-foreground"
+            >
+              Learn More
+              <span
+                class="inline-flex h-5 w-5 items-center justify-center rounded-full bg-foreground"
+                aria-hidden="true"
+              >
+                <span
+                  class="ml-px block h-0 w-0 border-y-4 border-l-[6px] border-y-transparent border-l-background"
+                ></span>
+              </span>
+            </a>
+          </div>
+        </div>
+
+        <div
+          style="--enter-delay: 200ms"
+          class="enter-fade relative min-h-80 overflow-hidden lg:min-h-160"
+        >
+          <DitherShader client:load />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 border-t border-border lg:grid-cols-2">
+        <div
+          class="border-b border-border px-6 py-10 sm:px-10 lg:border-b-0 lg:border-r lg:px-14"
+        >
+          <p
+            style="--enter-delay: 680ms"
+            class="enter max-w-md text-base leading-relaxed text-muted-foreground sm:text-lg"
+          >
+            Frame helps teams lock structure, hierarchy, and flow before color
+            and brand land — so the work ships sooner.
+          </p>
+        </div>
+        <div class="grid grid-cols-3 px-6 py-10 sm:px-10 lg:px-14">
+          {
+            heroStats.map((stat, i) => (
+              <div class="enter" style={`--enter-delay: ${740 + i * 80}ms`}>
+                <p class="text-xs font-medium tracking-wide text-muted-foreground sm:text-sm">
+                  {stat.label}
+                </p>
+                <p class="mt-3 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+                  {stat.value}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+      <SectionCorners />
+    </section>
+
+    <Reveal>
+      <section class="relative border-b border-border p-6 sm:p-10 lg:p-14">
+        <h2
+          class="overflow-hidden text-ellipsis whitespace-nowrap text-2xl font-semibold leading-[1.1] tracking-tight text-foreground sm:text-3xl lg:text-[2.5rem]"
+        >
+          A scaffold, not a finished product
+        </h2>
+
+        <div
+          class="mt-12 grid grid-cols-1 gap-4 md:grid-cols-3 lg:mt-16 lg:gap-6"
+        >
+          {
+            scaffoldCards.map((card, i) => (
+              <article
+                class:list={[
+                  "group relative flex min-h-65 flex-col justify-between rounded-2xl bg-muted p-6 sm:p-8 lg:min-h-75",
+                  i > 0 &&
+                    "md:before:absolute md:before:-left-2 md:before:top-0 md:before:bottom-0 md:before:w-px md:before:bg-border md:before:content-[''] lg:before:-left-3",
+                ]}
+              >
+                <h3 class="overflow-hidden text-ellipsis whitespace-nowrap text-lg font-semibold leading-tight tracking-tight text-foreground sm:text-xl">
+                  {card.title}{" "}
+                  <span
+                    aria-hidden="true"
+                    class="inline-block transition-transform duration-300 ease-out group-hover:translate-x-1"
+                  >
+                    →
+                  </span>
+                </h3>
+                <p class="mt-12 max-w-[28ch] text-sm leading-relaxed text-muted-foreground sm:text-base">
+                  {card.body}
+                </p>
+              </article>
+            ))
+          }
+        </div>
+        <SectionCorners />
+      </section>
+    </Reveal>
+
+    <Reveal>
+      <section class="relative border-b border-border p-6 sm:p-10 lg:p-14">
+        <div class="relative grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6">
+          <article
+            class="flex min-h-90 flex-col justify-between rounded-2xl border border-border bg-background p-6 sm:p-8 lg:min-h-120"
+          >
+            <h2
+              class="max-w-md text-2xl font-semibold leading-[1.15] tracking-tight text-foreground sm:text-3xl lg:text-[2rem]"
+            >
+              <span class="text-muted-foreground">Trusted by teams at</span> Linear,
+              Vercel, Figma, and others
+            </h2>
+            <p
+              class="mt-12 max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base"
+            >
+              Product teams reach for Frame when they need to skip the
+              blank-canvas phase and get a working scaffold in front of
+              stakeholders by end of week.
+            </p>
+          </article>
+          <div
+            class="relative min-h-90 overflow-hidden rounded-2xl bg-muted lg:min-h-120"
+          >
+            <LogoMarquee />
+          </div>
+          <div
+            aria-hidden="true"
+            class="pointer-events-none absolute top-0 bottom-0 hidden w-px -translate-x-1/2 bg-border lg:block"
+            style="left: 50%"
+          >
+          </div>
+        </div>
+        <SectionCorners />
+      </section>
+    </Reveal>
+
+    <Reveal>
+      <section class="relative border-b border-border">
+        <div class="px-6 pt-6 sm:px-10 sm:pt-10 lg:px-14 lg:pt-14">
+          <h2
+            class="text-2xl font-semibold leading-[1.1] tracking-tight text-foreground sm:text-3xl lg:text-[2.5rem]"
+          >
+            How Frame fits into your stack
+          </h2>
+        </div>
+
+        <div class="mt-12 border-t border-border lg:mt-16">
+          {
+            steps.map((step, i) => (
+              <div class="grid grid-cols-[auto_1fr] items-center gap-x-6 gap-y-3 border-b border-border px-6 py-6 sm:grid-cols-[auto_minmax(0,18rem)_minmax(0,1fr)] sm:gap-x-10 sm:px-10 sm:py-8 lg:px-14">
+                <div class="row-span-2 flex h-10 w-10 items-center justify-center self-center rounded-md border border-border font-mono text-sm text-foreground sm:row-span-1">
+                  {i + 1}
+                </div>
+                <h3 class="text-lg font-semibold leading-tight tracking-tight text-foreground sm:text-xl">
+                  {step.title}
+                </h3>
+                <p class="col-start-2 max-w-prose text-sm leading-relaxed text-muted-foreground sm:col-start-3 sm:text-base">
+                  {step.body}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+
+        <div
+          class="px-6 pb-6 pt-10 sm:px-10 sm:pb-10 sm:pt-12 lg:px-14 lg:pb-14"
+        >
+          <a
+            href="#docs"
+            class="focus-ring inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-3.5 font-mono text-xs font-medium uppercase tracking-[0.12em] text-background transition-opacity hover:opacity-90"
+          >
+            Read the docs
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <SectionCorners />
+      </section>
+    </Reveal>
+
+    <Reveal>
+      <Testimonials client:visible />
+    </Reveal>
+    <Reveal>
+      <Showcase client:visible />
+    </Reveal>
+    <Community client:visible />
+    <Reveal>
+      <Pricing client:visible />
+    </Reveal>
+    <Reveal>
+      <Faq client:visible />
+    </Reveal>
+  </main>
+  <Reveal>
+    <FinalCTA />
+  </Reveal>
+  <Footer />
+</Layout>

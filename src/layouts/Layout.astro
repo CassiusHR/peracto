@@ -1,0 +1,141 @@
+---
+import "@/styles/global.css";
+import { siteConfig } from "@/lib/config";
+import { ThemeSwitch } from "@/components/theme-switch";
+import SkipToContent from "@/components/SkipToContent.astro";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = siteConfig.description,
+} = Astro.props;
+
+const pageTitle = title ? `${title} | ${siteConfig.name}` : siteConfig.name;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? siteConfig.url).href;
+const ogImage = new URL(siteConfig.ogImage, Astro.site ?? siteConfig.url).href;
+---
+
+<!doctype html>
+<html lang={siteConfig.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=5"
+    />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content={siteConfig.keywords.join(", ")} />
+    <meta name="creator" content={siteConfig.creator} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={canonical} />
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0a0a0a" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={siteConfig.locale} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:site_name" content={siteConfig.name} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:creator" content={siteConfig.creator} />
+
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap"
+    />
+
+    <!-- No-flash theme init: runs before paint so the correct theme is
+         applied immediately and the page never flickers. -->
+    <script is:inline>
+      (function () {
+        try {
+          var stored = localStorage.getItem("theme");
+          var theme = stored === "light" || stored === "dark" || stored === "system" ? stored : "system";
+          var resolved =
+            theme === "system"
+              ? window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light"
+              : theme;
+          var root = document.documentElement;
+          root.classList.toggle("dark", resolved === "dark");
+          root.style.colorScheme = resolved;
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body
+    class="min-h-screen bg-background font-sans text-foreground antialiased"
+  >
+    <SkipToContent />
+    <div
+      class="mx-auto flex min-h-screen w-[calc(100%-1.5rem)] max-w-[1440px] flex-col border-x border-border sm:w-[calc(100%-2.5rem)] lg:w-[calc(100%-3rem)]"
+    >
+      <slot />
+    </div>
+    <ThemeSwitch client:load />
+
+    <!-- Global smooth scroll (Lenis) + anchor handling. Mirrors the old
+         SmoothScroll provider; degrades to native CSS smooth scroll when
+         disabled or when the user prefers reduced motion. -->
+    <script>
+      import Lenis from "lenis";
+      import { features } from "@/lib/config";
+
+      if (
+        features.smoothScroll &&
+        !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ) {
+        const lenis = new Lenis({
+          duration: 1.6,
+          easing: (t: number): number => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          orientation: "vertical",
+          gestureOrientation: "vertical",
+          smoothWheel: true,
+          wheelMultiplier: 1,
+          touchMultiplier: 2,
+        });
+
+        const raf = (time: number): void => {
+          lenis.raf(time);
+          requestAnimationFrame(raf);
+        };
+        requestAnimationFrame(raf);
+
+        document.addEventListener("click", (event) => {
+          const target = event.target;
+          if (!(target instanceof Element)) return;
+          const anchor = target.closest('a[href^="#"]');
+          if (!anchor) return;
+          const href = anchor.getAttribute("href");
+          if (!href || href === "#") return;
+          const el = document.querySelector(href);
+          if (!el || !(el instanceof HTMLElement)) return;
+          event.preventDefault();
+          lenis.scrollTo(el, { offset: -100 });
+        });
+      }
+    </script>
+  </body>
+</html>
