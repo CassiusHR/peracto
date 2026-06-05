@@ -21,12 +21,10 @@ export function getSystemTheme(): ResolvedTheme {
 }
 
 export function getStoredTheme(): Theme {
-  if (typeof window === "undefined") return "system";
+  if (typeof window === "undefined") return "dark";
   const stored = window.localStorage.getItem(THEME_STORAGE_KEY);
-  if (stored === "light" || stored === "dark" || stored === "system") {
-    return stored;
-  }
-  return "system";
+  if (stored === "dark") return "dark";
+  return "dark";
 }
 
 export function resolveTheme(theme: Theme): ResolvedTheme {
@@ -48,10 +46,10 @@ function applyResolvedTheme(resolved: ResolvedTheme): void {
   root.style.colorScheme = resolved;
 }
 
-export function setTheme(theme: Theme): void {
+export function setTheme(_theme: Theme): void {
   if (typeof window === "undefined") return;
-  window.localStorage.setItem(THEME_STORAGE_KEY, theme);
-  applyResolvedTheme(resolveTheme(theme));
+  window.localStorage.setItem(THEME_STORAGE_KEY, "dark");
+  applyResolvedTheme("dark");
   window.dispatchEvent(new CustomEvent(THEME_EVENT));
 }
 

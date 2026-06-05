@@ -1,7 +1,6 @@
 ---
 import "@/styles/global.css";
 import { siteConfig } from "@/lib/config";
-import { ThemeSwitch } from "@/components/theme-switch";
 import SkipToContent from "@/components/SkipToContent.astro";
 
 interface Props {
@@ -33,6 +32,23 @@ const ogImage = new URL(siteConfig.ogImage, Astro.site ?? siteConfig.url).href;
     <meta name="creator" content={siteConfig.creator} />
     <meta name="generator" content={Astro.generator} />
     <link rel="canonical" href={canonical} />
+
+    <!-- Default: white mark on black circle (older browsers / no media support) -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <!-- Adaptive: follows OS / browser chrome (Safari, Chrome, Firefox) -->
+    <link
+      rel="icon"
+      href="/favicon-light.svg"
+      type="image/svg+xml"
+      media="(prefers-color-scheme: light)"
+    />
+    <link
+      rel="icon"
+      href="/favicon-dark.svg"
+      type="image/svg+xml"
+      media="(prefers-color-scheme: dark)"
+    />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
 
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0a0a0a" />
@@ -70,17 +86,10 @@ const ogImage = new URL(siteConfig.ogImage, Astro.site ?? siteConfig.url).href;
     <script is:inline>
       (function () {
         try {
-          var stored = localStorage.getItem("theme");
-          var theme = stored === "light" || stored === "dark" || stored === "system" ? stored : "system";
-          var resolved =
-            theme === "system"
-              ? window.matchMedia("(prefers-color-scheme: dark)").matches
-                ? "dark"
-                : "light"
-              : theme;
           var root = document.documentElement;
-          root.classList.toggle("dark", resolved === "dark");
-          root.style.colorScheme = resolved;
+          root.classList.add("dark");
+          root.style.colorScheme = "dark";
+          localStorage.setItem("theme", "dark");
         } catch (e) {}
       })();
     </script>
@@ -94,8 +103,6 @@ const ogImage = new URL(siteConfig.ogImage, Astro.site ?? siteConfig.url).href;
     >
       <slot />
     </div>
-    <ThemeSwitch client:load />
-
     <!-- Global smooth scroll (Lenis) + anchor handling. Mirrors the old
          SmoothScroll provider; degrades to native CSS smooth scroll when
          disabled or when the user prefers reduced motion. -->

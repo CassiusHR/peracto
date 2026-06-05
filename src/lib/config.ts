@@ -21,7 +21,7 @@ export const features = {
  * `astro.config.ts` (`site` + sitemap), and the web manifest.
  */
 export const siteConfig = {
-  name: "Wireframe Template",
+  name: "Peracto",
   description:
     "A baseline for products that move quickly. Wireframe-stage scaffolding for teams that ship before the brand lands.",
   url: "https://perac.to",
