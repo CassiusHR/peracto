@@ -11,5 +11,8 @@ export default defineConfig({
   integrations: [react(), sitemap()],
   vite: {
     plugins: [tailwindcss()],
+    optimizeDeps: {
+      include: ["ogl", "lenis", "lucide-react", "motion"],
+    },
   },
 });

@@ -23,16 +23,24 @@ function Logo(): ReactNode {
   return (
     <a
       href="#main-content"
-      className="focus-ring enter inline-flex items-center gap-2 rounded-sm text-foreground"
-      aria-label="Frame home"
+      className="focus-ring enter inline-flex items-center gap-2.5 rounded-sm text-foreground"
+      aria-label="Peracto home"
     >
-      <span
-        className="h-5 w-5 shrink-0 bg-foreground"
+      <img
+        src="/peracto-icon.svg"
+        alt=""
+        width={20}
+        height={20}
+        className="h-5 w-5 shrink-0 dark:invert"
         aria-hidden="true"
       />
-      <span className="text-lg font-semibold leading-none tracking-tight">
-        Frame
-      </span>
+      <img
+        src="/peractoname1.svg"
+        alt="Peracto"
+        width={83}
+        height={20}
+        className="h-5 w-auto shrink-0 dark:invert"
+      />
     </a>
   );
 }

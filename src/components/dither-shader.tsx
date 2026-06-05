@@ -133,7 +133,7 @@ export function DitherShader({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const { resolvedTheme } = useTheme();
 
-  const themeTargetRef = useRef(0);
+  const themeTargetRef = useRef(1);
   const variantRef = useRef(variant === "cta" ? 1 : 0);
   const transparentRef = useRef(tone ? 1 : 0);
   const glyphColorRef = useRef<[number, number, number]>(
@@ -152,7 +152,7 @@ export function DitherShader({
   }, [tone]);
 
   useEffect(() => {
-    themeTargetRef.current = resolvedTheme === "dark" ? 1 : 0;
+    themeTargetRef.current = resolvedTheme === "light" ? 0 : 1;
   }, [resolvedTheme]);
 
   useEffect(() => {
