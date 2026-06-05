@@ -1,0 +1,20 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { LogoDitherPlayground } from "@/components/logo-dither-playground";
+---
+
+<Layout>
+  <main
+    id="main-content"
+    class="flex min-h-dvh flex-col items-center justify-center gap-8 p-6"
+  >
+    <p class="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
+      Logo dither demo
+    </p>
+    <LogoDitherPlayground client:load />
+    <p class="max-w-md text-center text-sm leading-relaxed text-muted-foreground">
+      Drag the sliders to tune the motion, then copy the parameter line and send
+      it over so I can lock those numbers in.
+    </p>
+  </main>
+</Layout>
