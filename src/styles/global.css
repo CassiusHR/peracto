@@ -168,8 +168,9 @@ body.nav-open [data-section-corner] {
   }
 }
 
-/* Vertical marquee. Consumers duplicate content; -50% lands the duplicate
- * on the original's starting position so the loop is seamless. */
+/* Vertical marquee. Duplicate content back-to-back (no gap between copies —
+ * put spacing inside each copy via padding) so -50% lands the duplicate on the
+ * original's starting position and the loop is seamless. */
 @keyframes marquee-up {
   from {
     transform: translateY(0);
