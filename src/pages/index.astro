@@ -7,7 +7,7 @@ import FinalCTA from "@/components/FinalCTA.astro";
 import Footer from "@/components/Footer.astro";
 
 import { Header } from "@/components/header";
-import { DitherShader } from "@/components/dither-shader";
+import { LogoDither } from "@/components/logo-dither";
 import { Testimonials } from "@/components/testimonials";
 import { Showcase } from "@/components/showcase";
 import { Community } from "@/components/community";
@@ -100,7 +100,16 @@ const steps = [
           style="--enter-delay: 200ms"
           class="enter-fade relative min-h-80 overflow-hidden lg:min-h-160"
         >
-          <DitherShader client:load />
+          <LogoDither
+            client:load
+            spinSpeed={0.2}
+            axisTilt={84}
+            axisDir={242}
+            depthScale={0.4}
+            ambient={0.5}
+            light={0.8}
+            brightness={0.5}
+          />
         </div>
       </div>
 
