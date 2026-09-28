@@ -1,27 +1,29 @@
 ---
-const linkColumns: ReadonlyArray<{
-  label?: string;
-  items: ReadonlyArray<string>;
-}> = [
+const linkColumns = [
   {
-    label: "Frame",
-    items: ["Homepage", "About", "Blog", "Careers", "Legal", "Privacy", "Terms", "Help"],
-  },
-  {
-    label: "Templates",
+    label: "Peracto",
     items: [
-      "Wireframe",
-      "Marketing",
-      "Dashboard",
-      "Landing",
-      "Docs",
-      "Portfolio",
-      "Commerce",
-      "App",
+      { label: "Home", href: "#main-content" },
+      { label: "Approach", href: "#approach" },
+      { label: "Engagements", href: "#engagements" },
     ],
   },
   {
-    items: ["Founders", "Designers", "Engineers", "Agencies"],
+    label: "Services",
+    items: [
+      { label: "Agentic Development", href: "#services" },
+      { label: "Forward Deployed Engineering", href: "#services" },
+      { label: "Fractional CTO / CPO", href: "#services" },
+      { label: "Executive Advisory", href: "#services" },
+    ],
+  },
+  {
+    label: "Connect",
+    items: [
+      { label: "FAQs", href: "#faq" },
+      { label: "Contact", href: "#contact" },
+      { label: "contacto@perac.to", href: "mailto:contacto@perac.to" },
+    ],
   },
 ];
 
@@ -66,10 +68,10 @@ const year = new Date().getFullYear();
                 {column.items.map((item) => (
                   <li>
                     <a
-                      href="#"
+                      href={item.href}
                       class="focus-ring rounded-sm text-sm text-neutral-100 transition-colors hover:text-white dark:text-neutral-900 dark:hover:text-black"
                     >
-                      {item}
+                      {item.label}
                     </a>
                   </li>
                 ))}
@@ -81,7 +83,7 @@ const year = new Date().getFullYear();
 
       <div class="lg:pt-px">
         <a
-          href="#contact"
+          href="mailto:contacto@perac.to"
           class="focus-ring inline-flex items-center gap-2 rounded-full border border-neutral-700 px-5 py-3 text-xs font-semibold uppercase tracking-[0.12em] text-neutral-100 transition-colors hover:border-neutral-500 dark:border-neutral-300 dark:text-neutral-900 dark:hover:border-neutral-500"
         >
           Talk to the team

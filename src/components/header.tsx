@@ -2,9 +2,9 @@ import { Menu, X } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 
 const primaryLinks = [
-  { label: "Layouts", href: "#layouts" },
-  { label: "System", href: "#system" },
-  { label: "Docs", href: "#docs" },
+  { label: "Services", href: "#services" },
+  { label: "Approach", href: "#approach" },
+  { label: "Engagements", href: "#engagements" },
 ];
 
 const mobileLinks = [
@@ -13,10 +13,9 @@ const mobileLinks = [
 ];
 
 const utilityLinks = [
-  { label: "License", href: "#license" },
-  { label: "Security", href: "#security" },
-  { label: "Privacy", href: "#privacy" },
-  { label: "Terms", href: "#terms" },
+  { label: "FAQs", href: "#faq" },
+  { label: "Contact", href: "#contact" },
+  { label: "contacto@perac.to", href: "mailto:contacto@perac.to" },
 ];
 
 function Logo(): ReactNode {
@@ -108,36 +107,38 @@ export function Header(): ReactNode {
 
         <div className="ml-auto hidden items-center gap-4 lg:flex">
           <a
-            href="#signin"
+            href="#contact"
             style={{ ["--enter-delay" as string]: "260ms" }}
             className="focus-ring enter rounded-full px-2 py-1.5 text-sm font-medium text-foreground transition-colors hover:text-muted-foreground"
           >
-            Sign In
+            Contact
           </a>
           <a
-            href="#start"
+            href="mailto:contacto@perac.to"
             style={{ ["--enter-delay" as string]: "320ms" }}
             className={`focus-ring enter rounded-full px-5 py-2.5 text-sm font-medium text-foreground transition-[background-color] duration-300 ease-out hover:text-muted-foreground ${
               isScrolled ? "bg-transparent" : "bg-muted hover:bg-border"
             }`}
           >
-            Open Frame
+            Let’s talk
           </a>
         </div>
 
         <div className="ml-auto flex items-center gap-2 lg:hidden">
           <a
-            href="#start"
+            href="mailto:contacto@perac.to"
             style={{ ["--enter-delay" as string]: "120ms" }}
             className="focus-ring enter rounded-full bg-muted px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-border"
           >
-            Open Frame
+            Let’s talk
           </a>
           <button
             type="button"
             style={{ ["--enter-delay" as string]: "180ms" }}
             className="focus-ring enter inline-flex h-10 w-10 items-center justify-center rounded-full bg-muted text-foreground transition-colors hover:bg-border"
-            aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-label={
+              isOpen ? "Close navigation menu" : "Open navigation menu"
+            }
             aria-expanded={isOpen}
             aria-controls="mobile-navigation"
             onClick={() => setIsOpen((open) => !open)}
@@ -178,7 +179,7 @@ export function Header(): ReactNode {
 
           <div className="mt-12 flex flex-col items-start gap-2 pb-10">
             <p className="text-base font-medium tracking-[-0.02em] text-muted-foreground">
-              Desk
+              Peracto
             </p>
             {utilityLinks.map((link) => (
               <a

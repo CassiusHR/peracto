@@ -8,13 +8,11 @@ interface Props {
   description?: string;
 }
 
-const {
-  title,
-  description = siteConfig.description,
-} = Astro.props;
+const { title, description = siteConfig.description } = Astro.props;
 
 const pageTitle = title ? `${title} | ${siteConfig.name}` : siteConfig.name;
-const canonical = new URL(Astro.url.pathname, Astro.site ?? siteConfig.url).href;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? siteConfig.url)
+  .href;
 const ogImage = new URL(siteConfig.ogImage, Astro.site ?? siteConfig.url).href;
 ---
 
@@ -29,7 +27,6 @@ const ogImage = new URL(siteConfig.ogImage, Astro.site ?? siteConfig.url).href;
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <meta name="keywords" content={siteConfig.keywords.join(", ")} />
-    <meta name="creator" content={siteConfig.creator} />
     <meta name="generator" content={Astro.generator} />
     <link rel="canonical" href={canonical} />
 
@@ -50,8 +47,16 @@ const ogImage = new URL(siteConfig.ogImage, Astro.site ?? siteConfig.url).href;
     />
     <link rel="apple-touch-icon" href="/favicon.svg" />
 
-    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0a0a0a" />
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: light)"
+      content="#ffffff"
+    />
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: dark)"
+      content="#0a0a0a"
+    />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
@@ -69,7 +74,6 @@ const ogImage = new URL(siteConfig.ogImage, Astro.site ?? siteConfig.url).href;
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
-    <meta name="twitter:creator" content={siteConfig.creator} />
 
     <link rel="manifest" href="/site.webmanifest" />
 
@@ -116,7 +120,8 @@ const ogImage = new URL(siteConfig.ogImage, Astro.site ?? siteConfig.url).href;
       ) {
         const lenis = new Lenis({
           duration: 1.6,
-          easing: (t: number): number => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          easing: (t: number): number =>
+            Math.min(1, 1.001 - Math.pow(2, -10 * t)),
           orientation: "vertical",
           gestureOrientation: "vertical",
           smoothWheel: true,

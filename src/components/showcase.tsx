@@ -3,14 +3,20 @@ import {
   ChevronLeft,
   ChevronRight,
   Plus,
-  TrendingUp,
   Search,
   Layers,
   Boxes,
   Sparkles,
   type LucideIcon,
 } from "lucide-react";
-import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from "react";
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import { SectionCorners } from "@/components/section-corners";
 
 const MORPH_TRANSITION: Transition = {
@@ -27,34 +33,28 @@ type ShowcaseCard = {
 
 const CARDS: ReadonlyArray<ShowcaseCard> = [
   {
-    id: "flagship",
-    title: "Flagship\nLarge Cap",
-    Icon: TrendingUp,
-    body: "A long-horizon position in resilient, high-quality public companies. Built for compounding without the noise of short-term swings.",
-  },
-  {
-    id: "opportunities",
-    title: "Opportunities\nSmall Cap",
-    Icon: Search,
-    body: "Concentrated exposure to under-the-radar names with asymmetric upside. Researched in-house, screened for conviction, sized with discipline.",
-  },
-  {
-    id: "offshore",
-    title: "Offshore\nGlobal Equity",
-    Icon: Layers,
-    body: "International equity exposure across developed and emerging markets, balanced for currency, region, and sector concentration.",
-  },
-  {
-    id: "automated",
-    title: "Automated\nFixed Income",
-    Icon: Boxes,
-    body: "A rules-based bond ladder that rebalances itself as rates move. Designed for steady carry without the friction of manual trading.",
-  },
-  {
-    id: "ventures",
-    title: "Ventures\nPrivate Markets",
+    id: "agentic",
+    title: "Agentic\nDevelopment",
     Icon: Sparkles,
-    body: "Curated access to late-stage private deals previously walled off to institutions. One subscription, one portfolio, one set of fees.",
+    body: "We build software with AI agents and engineering review. We also develop agents connected to your systems, with defined permissions, evaluations, and human oversight.",
+  },
+  {
+    id: "forward",
+    title: "Forward Deployed\nEngineering",
+    Icon: Boxes,
+    body: "Engineers embedded in your context, working with your team, data, and systems. We build integrations, support deployment, and transfer the knowledge needed to operate them.",
+  },
+  {
+    id: "fractional",
+    title: "Fractional\nCTO / CPO",
+    Icon: Layers,
+    body: "Technology or product leadership with an agreed mandate and commitment. CTO work covers architecture and engineering; CPO work covers customer problems, priorities, and the product roadmap.",
+  },
+  {
+    id: "advisory",
+    title: "Executive\nAdvisory",
+    Icon: Search,
+    body: "Independent technical and product judgment for founders and executive teams. We assess options, investments, and risks, and support the people responsible for making the decision.",
   },
 ];
 
@@ -126,10 +126,13 @@ export function Showcase(): ReactNode {
     track.scrollBy({ left: direction * (cardWidth + gap), behavior: "smooth" });
   }, []);
 
-  const activeCard = activeId ? CARDS.find((c) => c.id === activeId) ?? null : null;
+  const activeCard = activeId
+    ? (CARDS.find((c) => c.id === activeId) ?? null)
+    : null;
 
   return (
     <section
+      id="services"
       aria-labelledby={headingId}
       className="relative border-b border-border"
     >
@@ -139,22 +142,22 @@ export function Showcase(): ReactNode {
             id={headingId}
             className="text-4xl font-medium leading-[1.05] tracking-tighter text-foreground sm:text-5xl lg:text-[3.5rem] xl:text-[4rem]"
           >
-            Built lean,
+            Build it.
             <br />
-            shipped fast,
+            Embed with us.
             <br />
-            <span className="text-muted-foreground">ready for your brand</span>
+            <span className="text-muted-foreground">Lead it forward.</span>
           </h2>
           <p className="mt-10 max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base">
-            Each surface is intentionally generic so your brand drops in
-            without resistance.
+            Four ways to bring engineering and leadership into your business.
+            Choose the responsibility you need us to take on.
           </p>
           <div className="mt-10">
             <a
-              href="#offerings"
+              href="mailto:contacto@perac.to"
               className="focus-ring inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-4 text-xs font-semibold uppercase tracking-[0.12em] text-background transition-opacity hover:opacity-90"
             >
-              See Our Designs
+              Discuss your project
               <span aria-hidden="true">→</span>
             </a>
           </div>
@@ -173,7 +176,10 @@ export function Showcase(): ReactNode {
                 onClick={() => setActiveId(card.id)}
               />
             ))}
-            <div aria-hidden="true" className="shrink-0 basis-6 sm:basis-10 lg:basis-14" />
+            <div
+              aria-hidden="true"
+              className="shrink-0 basis-6 sm:basis-10 lg:basis-14"
+            />
           </div>
 
           <div className="flex items-center justify-center gap-2 px-6 pb-10 sm:px-10 sm:pb-12 lg:px-14 lg:pb-14">
@@ -197,7 +203,9 @@ export function Showcase(): ReactNode {
                   role="tab"
                   aria-selected={i === page}
                   className={`h-1.5 rounded-full transition-all duration-300 ${
-                    i === page ? "w-6 bg-foreground" : "w-1.5 bg-muted-foreground/40"
+                    i === page
+                      ? "w-6 bg-foreground"
+                      : "w-1.5 bg-muted-foreground/40"
                   }`}
                 />
               ))}
@@ -329,7 +337,11 @@ function ExpandedCard({
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 8 }}
-            transition={{ duration: 0.35, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
+            transition={{
+              duration: 0.35,
+              delay: 0.18,
+              ease: [0.22, 1, 0.36, 1],
+            }}
             className="max-w-prose text-sm leading-relaxed text-muted-foreground sm:text-base"
           >
             {card.body}

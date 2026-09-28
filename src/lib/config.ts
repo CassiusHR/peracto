@@ -23,18 +23,17 @@ export const features = {
 export const siteConfig = {
   name: "Peracto",
   description:
-    "A baseline for products that move quickly. Wireframe-stage scaffolding for teams that ship before the brand lands.",
+    "Agentic development, Forward Deployed Engineering, Fractional CTO/CPO, and executive advisory. Software and leadership for your next business challenge.",
   url: "https://perac.to",
   ogImage: "/og-image.png",
-  creator: "@yourhandle",
   locale: "en_US",
   lang: "en",
   keywords: [
-    "landing page",
-    "template",
-    "Astro",
-    "React",
-    "Tailwind CSS",
-    "TypeScript",
+    "agentic development",
+    "AI agents",
+    "forward deployed engineering",
+    "fractional CTO",
+    "fractional CPO",
+    "executive advisory",
   ],
 } as const;

@@ -36,37 +36,34 @@ type Testimonial = {
 
 const TESTIMONIALS: ReadonlyArray<Testimonial> = [
   {
-    id: "alyssa",
-    title: "Shipping the next version",
+    id: "build",
+    title: "A product that needs to ship",
     subtitle:
-      "Frame let our team move from sketches to a working app on day one — by the time the brand system landed we were already iterating on real flows.",
-    name: "Alyssa Reed",
-    role: "Design Lead, Halftone",
-    topic: "Brand-ready scaffold",
-    avatar:
-      "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=facearea&facepad=2&w=200&h=200&q=80&sat=-100",
+      "Bring a product idea, a stalled build, or an operational bottleneck. We help define the scope and build software that can be tested, used, and maintained.",
+    name: "Build & launch",
+    role: "For founders and product teams",
+    topic: "Agentic development",
+    avatar: "/peracto-icon.svg",
   },
   {
-    id: "will",
-    title: "Keeps up with iteration",
+    id: "integrate",
+    title: "AI that needs to work in context",
     subtitle:
-      "We tore out maybe a quarter of the components and the rest just stayed — the structure was right enough that nothing got in our way.",
-    name: "Will Aldridge",
-    role: "Engineering, Northbridge",
-    topic: "Structure that scales",
-    avatar:
-      "https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=facearea&facepad=2.2&w=200&h=200&q=80&sat=-100",
+      "Connect agents to the systems and workflows your business depends on. We work alongside your team to define permissions, evaluate behavior, and support adoption.",
+    name: "Integrate & operate",
+    role: "For technology and operations teams",
+    topic: "Forward Deployed Engineering",
+    avatar: "/peracto-icon.svg",
   },
   {
-    id: "andrew",
-    title: "Wireframe to launch in a sprint",
+    id: "lead",
+    title: "Decisions that need an owner",
     subtitle:
-      "We brought stakeholders something tangible by Wednesday and shipped it the following week. Frame removed the part of the timeline we used to dread.",
-    name: "Andrew Marin",
-    role: "Founder, Stack Studio",
-    topic: "Fast stakeholder demos",
-    avatar:
-      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=facearea&facepad=2&w=200&h=200&q=80&sat=-100",
+      "Set product priorities, make architecture decisions, and align execution with the business. Choose fractional leadership for ongoing ownership or advisory for focused guidance.",
+    name: "Decide & lead",
+    role: "For CEOs and executive teams",
+    topic: "Fractional leadership & advisory",
+    avatar: "/peracto-icon.svg",
   },
 ];
 
@@ -180,10 +177,10 @@ export function Testimonials(): ReactNode {
           </div>
           <div className="mt-10">
             <a
-              href="#templates"
+              href="#services"
               className="focus-ring inline-flex items-center gap-2 rounded-full border border-border px-5 py-3.5 font-mono text-xs font-medium uppercase tracking-[0.12em] text-foreground transition-colors hover:bg-muted"
             >
-              See the templates
+              Explore our services
               <span aria-hidden="true">→</span>
             </a>
           </div>
@@ -282,14 +279,14 @@ function CarouselControls({
       <button
         type="button"
         onClick={() => onAdvance(-1)}
-        aria-label="Previous testimonial"
+        aria-label="Previous challenge"
         className="focus-ring inline-flex h-8 w-8 items-center justify-center rounded-full bg-muted text-foreground transition-opacity hover:opacity-80"
       >
         <ChevronLeft className="h-4 w-4" />
       </button>
       <div
         role="tablist"
-        aria-label="Testimonial progress"
+        aria-label="Business challenges"
         className="flex h-8 items-center gap-2 rounded-full bg-muted px-4"
       >
         {Array.from({ length: count }).map((_, i) => (
@@ -298,7 +295,7 @@ function CarouselControls({
             type="button"
             role="tab"
             aria-selected={i === activeIndex}
-            aria-label={`Go to testimonial ${i + 1}`}
+            aria-label={`Go to challenge ${i + 1}`}
             onClick={() => onSelect(i)}
             className={`h-1.5 rounded-full transition-all duration-300 ${
               i === activeIndex
@@ -311,7 +308,7 @@ function CarouselControls({
       <button
         type="button"
         onClick={() => onAdvance(1)}
-        aria-label="Next testimonial"
+        aria-label="Next challenge"
         className="focus-ring inline-flex h-8 w-8 items-center justify-center rounded-full bg-muted text-foreground transition-opacity hover:opacity-80"
       >
         <ChevronRight className="h-4 w-4" />
@@ -367,7 +364,7 @@ function TestimonialCard({
             src={avatar}
             alt=""
             loading="lazy"
-            className="absolute inset-0 h-full w-full object-cover grayscale"
+            className="absolute inset-0 m-auto h-6 w-6 dark:invert"
           />
         </div>
       </div>

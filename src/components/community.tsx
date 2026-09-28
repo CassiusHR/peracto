@@ -14,23 +14,62 @@ import { DitherShader } from "@/components/dither-shader";
 type CommunityEntry = { builder: string; project: string };
 
 const COMMUNITY_TOP: ReadonlyArray<CommunityEntry> = [
-  { builder: "Mira Halden", project: "Portfolio" },
-  { builder: "Jules Okafor", project: "Agency site" },
-  { builder: "Sora Linde", project: "Product launch" },
-  { builder: "Ravi Mahar", project: "Studio index" },
-  { builder: "Emi Tanaka", project: "Newsletter" },
-  { builder: "Otto Vester", project: "Conference site" },
-  { builder: "Petra Soros", project: "Photo journal" },
+  {
+    builder: "Product development",
+    project: "From problem definition to a working release",
+  },
+  {
+    builder: "AI agents",
+    project: "Tasks, tools, permissions, and human oversight",
+  },
+  {
+    builder: "System integrations",
+    project: "Connect the data and tools your teams use",
+  },
+  {
+    builder: "Operational workflows",
+    project: "Automate steps with clear ownership",
+  },
+  {
+    builder: "Evaluation",
+    project: "Test agent behavior against defined criteria",
+  },
+  {
+    builder: "Delivery systems",
+    project: "Review, testing, and release workflows",
+  },
+  {
+    builder: "Knowledge transfer",
+    project: "Give your team the context to keep building",
+  },
 ];
 
 const COMMUNITY_BOTTOM: ReadonlyArray<CommunityEntry> = [
-  { builder: "Lior Mendel", project: "Coffee shop" },
-  { builder: "Anya Petrova", project: "Music label" },
-  { builder: "Kai Westwood", project: "Restaurant" },
-  { builder: "Noor Saleh", project: "Gallery" },
-  { builder: "Tomás Ribeiro", project: "Skate brand" },
-  { builder: "Ines Caron", project: "Architecture" },
-  { builder: "Yuki Sato", project: "Type foundry" },
+  {
+    builder: "Technology strategy",
+    project: "Architecture grounded in business constraints",
+  },
+  {
+    builder: "Product direction",
+    project: "Customer problems and priorities worth pursuing",
+  },
+  {
+    builder: "Engineering leadership",
+    project: "Standards, decisions, and delivery ownership",
+  },
+  { builder: "AI adoption", project: "Practical changes to how teams work" },
+  {
+    builder: "Executive decisions",
+    project: "Options, tradeoffs, and a clear next step",
+  },
+  {
+    builder: "Technical assessment",
+    project: "Understand the starting point before investing",
+  },
+  {
+    builder: "Operating metrics",
+    project: "Measure progress against the agreed outcome",
+  },
 ];
 
 export function Community(): ReactNode {
@@ -111,12 +150,11 @@ export function Community(): ReactNode {
                 id="community-heading"
                 className="text-2xl font-medium leading-[1.05] tracking-tighter text-foreground sm:text-3xl lg:text-[2.5rem]"
               >
-                From our community, built with Frame
+                What we bring to the work
               </h2>
               <p className="mt-3 max-w-lg text-sm leading-relaxed text-muted-foreground sm:text-base">
-                A small wall of work shipped on top of the template.
-                Different fields, different aesthetics, same starting
-                point.
+                Engineering, product, and executive capabilities, combined
+                around the problem your business needs to solve.
               </p>
             </div>
           </div>
@@ -154,11 +192,7 @@ export function Community(): ReactNode {
   );
 }
 
-function Backdrop({
-  opacity,
-}: {
-  opacity: MotionValue<number>;
-}): ReactNode {
+function Backdrop({ opacity }: { opacity: MotionValue<number> }): ReactNode {
   return (
     <motion.div
       aria-hidden="true"

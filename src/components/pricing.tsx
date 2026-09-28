@@ -8,7 +8,9 @@ type Tier = {
   id: string;
   name: string;
   tagline: string;
-  monthly: number | null;
+  format: string;
+  detail: string;
+  outcomes: ReadonlyArray<string>;
   cta: { label: string; href: string };
   features: ReadonlyArray<string>;
   featured: boolean;
@@ -16,63 +18,73 @@ type Tier = {
 
 const TIERS: ReadonlyArray<Tier> = [
   {
-    id: "starter",
-    name: "Starter",
-    tagline: "For solo builders shipping their first version.",
-    monthly: 0,
-    cta: { label: "Start for free", href: "#start" },
+    id: "assess",
+    name: "Assess",
+    format: "Clarity",
+    detail: "Before you commit",
+    tagline: "Understand the problem and define a practical next step.",
+    cta: { label: "Discuss an assessment", href: "mailto:contacto@perac.to" },
     features: [
-      "Wireframe template, single project use",
-      "Tokenized design system",
-      "Community support",
+      "Workflow and systems review",
+      "Technical and product priorities",
+      "Scope and success criteria",
+    ],
+    outcomes: [
+      "Current-state assessment",
+      "Prioritized recommendations",
+      "A roadmap for the next engagement",
     ],
     featured: false,
   },
   {
-    id: "studio",
-    name: "Studio",
-    tagline: "For teams who need every template, brand-ready on day one.",
-    monthly: 24,
-    cta: { label: "Start with Studio", href: "#start" },
+    id: "build",
+    name: "Build",
+    format: "Delivery",
+    detail: "With an agreed scope",
+    tagline: "Build a product or embed engineering in your operation.",
+    cta: { label: "Discuss a build", href: "mailto:contacto@perac.to" },
     features: [
-      "Everything in Starter",
-      "Full template library access",
-      "Brand presets and theme tooling",
-      "Priority support, weekly updates",
+      "Agentic product development",
+      "Forward Deployed Engineering",
+      "Integration and validation",
+    ],
+    outcomes: [
+      "Working software and integrations",
+      "Tests and acceptance checks",
+      "Documentation and knowledge transfer",
     ],
     featured: true,
   },
   {
-    id: "enterprise",
-    name: "Enterprise",
-    tagline: "For organizations with bespoke design and compliance needs.",
-    monthly: null,
-    cta: { label: "Talk to sales", href: "#contact" },
+    id: "lead",
+    name: "Lead",
+    format: "Direction",
+    detail: "With a defined mandate",
+    tagline: "Bring technology and product judgment into your leadership team.",
+    cta: { label: "Discuss leadership", href: "mailto:contacto@perac.to" },
     features: [
-      "Everything in Studio",
-      "Custom integrations and SSO",
-      "Dedicated solutions partner",
-      "Audit, SLA, and procurement support",
+      "Fractional CTO or CPO",
+      "Executive advisory",
+      "Agreed commitment and ownership",
+    ],
+    outcomes: [
+      "Technology or product strategy",
+      "Clear priorities and decision ownership",
+      "An agreed review and planning rhythm",
     ],
     featured: false,
   },
 ];
 
-type Billing = "monthly" | "annual";
-
-function formatPrice(monthly: number, billing: Billing): string {
-  if (monthly === 0) return "$0";
-  const effective = billing === "annual" ? monthly * 0.8 : monthly;
-  const rounded = Math.round(effective * 10) / 10;
-  return Number.isInteger(rounded) ? `$${rounded}` : `$${rounded.toFixed(2)}`;
-}
+type DetailView = "scope" | "deliverables";
 
 export function Pricing(): ReactNode {
-  const [billing, setBilling] = useState<Billing>("monthly");
+  const [view, setView] = useState<DetailView>("scope");
   const headingId = useId();
 
   return (
     <section
+      id="engagements"
       aria-labelledby={headingId}
       className="relative border-b border-border p-6 sm:p-10 lg:p-14"
     >
@@ -82,20 +94,20 @@ export function Pricing(): ReactNode {
             id={headingId}
             className="text-2xl font-semibold leading-[1.1] tracking-tight text-foreground sm:text-3xl lg:text-[2.5rem]"
           >
-            Three tiers. No surprises.
+            A starting point for your next move.
           </h2>
           <p className="mt-5 max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base">
-            Start free, scale into the full library when your team is
-            ready, and bring it in-house when the work demands it.
+            Start with an assessment, a build, or a leadership mandate. Scope,
+            commitment, and fees are agreed around your needs.
           </p>
         </div>
 
-        <BillingToggle value={billing} onChange={setBilling} />
+        <DetailToggle value={view} onChange={setView} />
       </div>
 
       <div className="relative mt-12 grid grid-cols-1 gap-4 lg:mt-16 lg:grid-cols-3 lg:gap-6">
         {TIERS.map((tier) => (
-          <PricingCard key={tier.id} tier={tier} billing={billing} />
+          <PricingCard key={tier.id} tier={tier} view={view} />
         ))}
       </div>
       <SectionCorners />
@@ -103,28 +115,28 @@ export function Pricing(): ReactNode {
   );
 }
 
-function BillingToggle({
+function DetailToggle({
   value,
   onChange,
 }: {
-  value: Billing;
-  onChange: (next: Billing) => void;
+  value: DetailView;
+  onChange: (next: DetailView) => void;
 }): ReactNode {
-  const isAnnual = value === "annual";
+  const showDeliverables = value === "deliverables";
   return (
     <div
       role="radiogroup"
-      aria-label="Billing period"
+      aria-label="Engagement details"
       className="inline-flex items-center gap-4"
     >
-      <div className="relative inline-flex h-10 items-center rounded-full bg-muted p-1">
+      <div className="relative inline-grid h-10 grid-cols-2 items-center rounded-full bg-muted p-1">
         <span
           aria-hidden="true"
           className={`absolute top-1 bottom-1 left-1 w-[calc(50%-0.25rem)] rounded-full bg-foreground transition-transform duration-300 ease-out ${
-            isAnnual ? "translate-x-full" : "translate-x-0"
+            showDeliverables ? "translate-x-full" : "translate-x-0"
           }`}
         />
-        {(["monthly", "annual"] as const).map((option) => {
+        {(["scope", "deliverables"] as const).map((option) => {
           const active = option === value;
           return (
             <button
@@ -134,31 +146,26 @@ function BillingToggle({
               aria-checked={active}
               onClick={() => onChange(option)}
               className={`focus-ring relative z-10 inline-flex h-8 items-center justify-center rounded-full px-4 font-mono text-xs font-medium uppercase tracking-[0.12em] transition-colors ${
-                active ? "text-background" : "text-muted-foreground hover:text-foreground"
+                active
+                  ? "text-background"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              {option === "monthly" ? "Monthly" : "Annual"}
+              {option === "scope" ? "Scope" : "Deliverables"}
             </button>
           );
         })}
       </div>
-      <span
-        className={`font-mono text-[0.6875rem] uppercase tracking-[0.14em] transition-opacity ${
-          isAnnual ? "text-foreground opacity-100" : "text-muted-foreground opacity-60"
-        }`}
-      >
-        Save 20% with annual
-      </span>
     </div>
   );
 }
 
 function PricingCard({
   tier,
-  billing,
+  view,
 }: {
   tier: Tier;
-  billing: Billing;
+  view: DetailView;
 }): ReactNode {
   const { featured } = tier;
   const featuredShadow = featured
@@ -193,7 +200,7 @@ function PricingCard({
           </h3>
           {featured ? (
             <span className="inline-flex items-center rounded-full bg-foreground px-3 py-1 font-mono text-[0.625rem] font-medium uppercase tracking-[0.16em] text-background">
-              Most popular
+              Hands-on
             </span>
           ) : null}
         </header>
@@ -203,31 +210,16 @@ function PricingCard({
         </p>
 
         <div className="mt-10 flex items-baseline gap-2">
-          {tier.monthly === null ? (
-            <span className="text-4xl font-medium tracking-tight text-foreground sm:text-5xl">
-              Custom
-            </span>
-          ) : (
-            <>
-              <span className="text-4xl font-medium tracking-tight text-foreground sm:text-5xl">
-                {formatPrice(tier.monthly, billing)}
-              </span>
-              <span className="text-sm text-muted-foreground">/ month</span>
-            </>
-          )}
+          <span className="text-4xl font-medium tracking-tight text-foreground sm:text-5xl">
+            {tier.format}
+          </span>
         </div>
-        {tier.monthly !== null && tier.monthly > 0 ? (
-          <p className="mt-2 font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted-foreground">
-            {billing === "annual" ? "Billed annually" : "Billed monthly"}
-          </p>
-        ) : (
-          <p className="mt-2 font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted-foreground">
-            {tier.monthly === 0 ? "Free forever" : "Volume pricing"}
-          </p>
-        )}
+        <p className="mt-2 font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted-foreground">
+          {tier.detail}
+        </p>
 
         <ul className="mt-10 space-y-3">
-          {tier.features.map((feature) => (
+          {(view === "scope" ? tier.features : tier.outcomes).map((feature) => (
             <li
               key={feature}
               className="flex items-start gap-3 text-sm leading-relaxed text-foreground"

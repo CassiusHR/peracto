@@ -20,45 +20,45 @@ type FAQ = {
 
 const FAQS: ReadonlyArray<FAQ> = [
   {
-    q: "What exactly does Frame give me on day one?",
+    q: "What do you mean by agentic development?",
     a: [
-      "Frame is a wireframe-stage scaffold for product teams. The repo boots a working app with routing, layout primitives, theming, and a set of intentionally generic component placeholders already in place — so the first feature you ship doesn't start from a blank canvas. Brand, content, and product details are meant to be overwritten at your own pace.",
+      "We use AI agents in the development process, with engineering review and validation. We can also build agents that operate within your business workflows. We define which capability your project needs before agreeing on scope.",
     ],
   },
   {
-    q: "How do I start a project from Frame?",
+    q: "Can you work with our existing team?",
     a: [
-      "Clone the repo, install with your preferred package manager, and run the dev server. There's no install wizard, no setup script, and no required environment variables for the default routes. Most teams have a working local app within a few minutes.",
+      "Yes. Through Forward Deployed Engineering, we work within your context, coordinate responsibilities, and build alongside your team. The time commitment and working arrangement are agreed for each engagement.",
     ],
   },
   {
-    q: "Is Frame opinionated about my stack?",
+    q: "How is a fractional CTO or CPO different from an advisor?",
     a: [
-      "Frame uses Next.js, Tailwind, and TypeScript out of the box, but it doesn't introduce custom abstractions on top of them. If your team already uses these tools, the conventions will look familiar. If you migrate off any one of them later, the rest of the scaffold is still useful.",
+      "A fractional CTO or CPO takes on an ongoing leadership mandate. An advisor provides analysis and recommendations to the people who retain that responsibility. Technology and product leadership can be scoped separately.",
     ],
   },
   {
-    q: "Can I use Frame for client work?",
+    q: "Do we need a fully defined project?",
     a: [
-      "Yes. Frame is licensed for unlimited commercial projects (you just can't resell the template itself), and intentionally easy to strip back to a minimal starting point. Teams use it as the first commit on internal tools, marketing sites, and early-stage product builds — anywhere the goal is to put structure in place before brand and copy land.",
+      "We can start by clarifying the problem, priorities, and constraints. That gives us a basis for proposing the scope and the right way to work together.",
     ],
   },
   {
-    q: "How does Frame handle theming and dark mode?",
+    q: "How do you use AI responsibly in delivery?",
     a: [
-      "Theme tokens live in CSS variables and are wired through Tailwind's theme inline mapping. A floating theme switch toggles between light and dark; reduced-motion preferences and color-scheme metadata are honored automatically. Replace the token values with your brand palette and the rest of the system follows.",
+      "We agree on data boundaries, access, and tool use before the work begins. AI-assisted deliverables are reviewed and validated, and agents are evaluated against the permissions and acceptance criteria defined for the project.",
     ],
   },
   {
-    q: "What's missing on purpose?",
+    q: "How is an engagement priced?",
     a: [
-      "Frame intentionally omits anything that would couple it to a specific product: forms libraries, state managers, auth, analytics, and CMS integrations are not pre-wired. The structure is opinionated; the runtime behavior is not. Drop in whatever your team prefers.",
+      "Pricing depends on scope, commitment, and responsibility. The proposal defines deliverables, terms, and acceptance criteria before work begins.",
     ],
   },
   {
-    q: "Will I outgrow Frame?",
+    q: "What happens after delivery?",
     a: [
-      "That's the goal. Frame is meant to be torn out incrementally as your real design system, content model, and feature surface arrive. Most teams replace components piece by piece rather than all at once — by the time the scaffold is gone, the structure underneath has already paid for itself.",
+      "We agree on whether the work continues with our support or transfers to your team. Documentation, operation, and ongoing support are defined in the engagement scope.",
     ],
   },
 ];
@@ -69,6 +69,7 @@ export function Faq(): ReactNode {
 
   return (
     <section
+      id="faq"
       aria-labelledby={headingId}
       className="relative border-b border-border p-6 sm:p-10 lg:p-14"
     >
