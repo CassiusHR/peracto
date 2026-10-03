@@ -19,6 +19,14 @@
 - Do not install dependencies or alter global environment state without a concrete reason tied to the task.
 - Report changes, checks run, and unverified behavior. Distinguish local checks from publication and live verification.
 
+## Accessibility, performance, and indexing
+
+- Keep every route `noindex` in the shared layout and static response headers. Do not enable indexing or sitemap discovery without explicit approval. Leave HTML crawlable so bots can read `noindex`.
+- Use native page scrolling; do not intercept wheel gestures or pin sections to convert vertical scrolling into horizontal motion.
+- Keep keyboard focus within open overlays, support Escape, and restore focus on close. Navigation anchors must clear the sticky header.
+- Respect reduced motion and offer a pause control for decorative loops. Stop WebGL rendering outside the viewport and when the document is hidden.
+- Prefer native HTML controls and static Astro components when interaction does not require React. Keep critical fonts local with `font-display: swap`.
+
 ## Content work
 
 - The current repositioning proposal is in `docs/copy-plan.md`. It is a draft, not an approved commercial specification.

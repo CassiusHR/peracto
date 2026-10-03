@@ -1,5 +1,21 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Geist";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/geist-latin.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Geist Mono";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/geist-mono-latin.woff2") format("woff2");
+}
+
 /* Switch the `dark:` variant from the OS media query to a `.dark`
  * class on the html element, so next-themes drives the theme. */
 @custom-variant dark (&:where(.dark, .dark *));
@@ -54,8 +70,21 @@
 
 html {
   color-scheme: light;
-  /* Native fallback when SmoothScroll is disabled or reduced motion is on. */
+  /* Browser-native anchor navigation; no wheel interception. */
   scroll-behavior: smooth;
+}
+
+/* Anchor targets and focused controls must clear the sticky navigation. */
+[id],
+:focus-visible {
+  scroll-margin-top: 6rem;
+}
+
+button,
+a,
+summary,
+input {
+  touch-action: manipulation;
 }
 
 html.dark {
@@ -69,6 +98,7 @@ html.dark {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
@@ -147,8 +177,8 @@ body.nav-open [data-section-corner] {
  * a shared IntersectionObserver adds `.is-visible` once they enter the
  * viewport — a lightweight, JS-light replacement for Motion's whileInView. */
 .reveal {
-  opacity: 0;
-  transform: translate3d(0, 12px, 0);
+  opacity: 1;
+  transform: none;
   transition:
     opacity 600ms cubic-bezier(0.22, 1, 0.36, 1),
     transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
@@ -157,11 +187,17 @@ body.nav-open [data-section-corner] {
 
 .reveal.is-visible {
   opacity: 1;
-  transform: translate3d(0, 0, 0);
+  transform: none;
+}
+
+.reveal[data-reveal-pending] {
+  opacity: 0;
+  transform: translate3d(0, 12px, 0);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .reveal {
+  .reveal,
+  .reveal[data-reveal-pending] {
     opacity: 1;
     transform: none;
     transition: none;
@@ -187,4 +223,8 @@ body.nav-open [data-section-corner] {
   to {
     transform: translateY(0);
   }
+}
+
+.webgl-ready .logo-fallback {
+  display: none;
 }

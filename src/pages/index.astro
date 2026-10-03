@@ -5,14 +5,14 @@ import SectionCorners from "@/components/SectionCorners.astro";
 import LogoMarquee from "@/components/LogoMarquee.astro";
 import FinalCTA from "@/components/FinalCTA.astro";
 import Footer from "@/components/Footer.astro";
+import Faq from "@/components/Faq.astro";
+import MotionControls from "@/components/MotionControls.astro";
 
 import { Header } from "@/components/header";
 import { LogoDither } from "@/components/logo-dither";
 import { Testimonials } from "@/components/testimonials";
 import { Showcase } from "@/components/showcase";
-import { Community } from "@/components/community";
 import { Pricing } from "@/components/pricing";
-import { Faq } from "@/components/faq";
 
 const heroStats = [
   { label: "Engineering", value: "Agentic" },
@@ -57,7 +57,7 @@ const steps = [
 
 <Layout title="Agentic development & Fractional CTO/CPO">
   <Header client:load />
-  <main id="main-content" class="flex-1">
+  <main id="main-content" tabindex="-1" class="flex-1">
     <section class="relative border-b border-border">
       <div class="grid grid-cols-1 lg:grid-cols-2">
         <div
@@ -110,6 +110,7 @@ const steps = [
             light={0.8}
             brightness={0.5}
           />
+          <MotionControls />
         </div>
       </div>
 
@@ -193,15 +194,15 @@ const steps = [
             <h2
               class="max-w-md text-2xl font-semibold leading-[1.15] tracking-tight text-foreground sm:text-3xl lg:text-[2rem]"
             >
-              <span class="text-muted-foreground">Inside your team.</span>
-              Accountable to the outcome.
+              <span class="text-muted-foreground">Leading technology.</span>
+              Decades of global expertise.
             </h2>
             <p
               class="mt-12 max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base"
             >
-              Good engineering starts with context. We work with the people,
-              systems, and constraints behind the problem, from the first
-              product decision through delivery and adoption.
+              We use the best technologies on the market, backed by senior
+              engineering talent and international expertise. Our team brings
+              decades of experience building services used by billions of users.
             </p>
           </article>
           <div
@@ -272,16 +273,15 @@ const steps = [
     <Reveal>
       <Showcase client:visible />
     </Reveal>
-    <Community client:visible />
     <Reveal>
       <Pricing client:visible />
     </Reveal>
     <Reveal>
-      <Faq client:visible />
+      <Faq />
+    </Reveal>
+    <Reveal>
+      <FinalCTA />
     </Reveal>
   </main>
-  <Reveal>
-    <FinalCTA />
-  </Reveal>
   <Footer />
 </Layout>

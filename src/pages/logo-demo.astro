@@ -3,16 +3,24 @@ import Layout from "@/layouts/Layout.astro";
 import { LogoDitherPlayground } from "@/components/logo-dither-playground";
 ---
 
-<Layout>
+<Layout
+  title="Logo dither playground"
+  description="An internal playground for the Peracto logo animation."
+>
   <main
     id="main-content"
+    tabindex="-1"
     class="flex min-h-dvh flex-col items-center justify-center gap-8 p-6"
   >
-    <p class="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
+    <h1
+      class="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground"
+    >
       Logo dither demo
-    </p>
+    </h1>
     <LogoDitherPlayground client:load />
-    <p class="max-w-md text-center text-sm leading-relaxed text-muted-foreground">
+    <p
+      class="max-w-md text-center text-sm leading-relaxed text-muted-foreground"
+    >
       Drag the sliders to tune the motion, then copy the parameter line and send
       it over so I can lock those numbers in.
     </p>

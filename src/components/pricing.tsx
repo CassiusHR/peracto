@@ -123,12 +123,10 @@ function DetailToggle({
   onChange: (next: DetailView) => void;
 }): ReactNode {
   const showDeliverables = value === "deliverables";
+  const groupId = useId();
   return (
-    <div
-      role="radiogroup"
-      aria-label="Engagement details"
-      className="inline-flex items-center gap-4"
-    >
+    <fieldset className="inline-flex items-center gap-4">
+      <legend className="sr-only">Engagement details</legend>
       <div className="relative inline-grid h-10 grid-cols-2 items-center rounded-full bg-muted p-1">
         <span
           aria-hidden="true"
@@ -139,24 +137,32 @@ function DetailToggle({
         {(["scope", "deliverables"] as const).map((option) => {
           const active = option === value;
           return (
-            <button
+            <label
               key={option}
-              type="button"
-              role="radio"
-              aria-checked={active}
-              onClick={() => onChange(option)}
-              className={`focus-ring relative z-10 inline-flex h-8 items-center justify-center rounded-full px-4 font-mono text-xs font-medium uppercase tracking-[0.12em] transition-colors ${
+              className={`relative z-10 inline-flex h-8 cursor-pointer items-center justify-center rounded-full px-4 font-mono text-xs font-medium uppercase tracking-[0.12em] transition-colors ${
                 active
                   ? "text-background"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
+              <input
+                type="radio"
+                name={groupId}
+                value={option}
+                checked={active}
+                onChange={() => onChange(option)}
+                className="peer sr-only"
+              />
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 rounded-full peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-ring"
+              />
               {option === "scope" ? "Scope" : "Deliverables"}
-            </button>
+            </label>
           );
         })}
       </div>
-    </div>
+    </fieldset>
   );
 }
 
@@ -224,7 +230,10 @@ function PricingCard({
               key={feature}
               className="flex items-start gap-3 text-sm leading-relaxed text-foreground"
             >
-              <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-muted text-foreground">
+              <span
+                aria-hidden="true"
+                className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-muted text-foreground"
+              >
                 <Check className="h-3 w-3" strokeWidth={2} />
               </span>
               <span>{feature}</span>

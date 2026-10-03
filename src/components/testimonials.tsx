@@ -1,5 +1,10 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { AnimatePresence, motion, type Transition } from "motion/react";
+import {
+  AnimatePresence,
+  MotionConfig,
+  motion,
+  type Transition,
+} from "motion/react";
 import {
   useCallback,
   useEffect,
@@ -88,17 +93,6 @@ export function Testimonials(): ReactNode {
   }, []);
 
   useEffect(() => {
-    const onKey = (e: KeyboardEvent): void => {
-      const target = e.target as HTMLElement | null;
-      if (target && /input|textarea|select/i.test(target.tagName)) return;
-      if (e.key === "ArrowRight") advance(1);
-      else if (e.key === "ArrowLeft") advance(-1);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [advance]);
-
-  useEffect(() => {
     const el = viewportRef.current;
     if (!el) return;
     const update = (): void => setViewportWidth(el.clientWidth);
@@ -140,126 +134,138 @@ export function Testimonials(): ReactNode {
   if (!active) return null;
 
   return (
-    <section
-      aria-labelledby={headingId}
-      className="relative border-b border-border p-6 sm:p-10 lg:p-14"
-    >
-      <div className="grid grid-cols-1 gap-10 sm:grid-cols-[1fr_auto] sm:items-start sm:gap-8">
-        <div className="max-w-3xl">
-          <div className="min-h-16">
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.h2
-                key={active.id}
-                id={headingId}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }}
-                transition={SWAP_TRANSITION}
-                className="text-3xl font-medium leading-[1.05] tracking-tighter text-foreground sm:text-4xl lg:text-[3.5rem]"
+    <MotionConfig reducedMotion="user">
+      <section
+        aria-labelledby={headingId}
+        onKeyDown={(event) => {
+          if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
+            event.preventDefault();
+            advance(event.key === "ArrowRight" ? 1 : -1);
+          }
+        }}
+        className="relative border-b border-border p-6 sm:p-10 lg:p-14"
+      >
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-[1fr_auto] sm:items-start sm:gap-8">
+          <div className="max-w-3xl">
+            <div className="min-h-16">
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.h2
+                  key={active.id}
+                  id={headingId}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -12 }}
+                  transition={SWAP_TRANSITION}
+                  className="text-3xl font-medium leading-[1.05] tracking-tighter text-foreground sm:text-4xl lg:text-[3.5rem]"
+                >
+                  {active.title}
+                </motion.h2>
+              </AnimatePresence>
+            </div>
+            <div className="mt-6 min-h-16 max-w-xl">
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.p
+                  key={active.id}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ ...SWAP_TRANSITION, delay: 0.05 }}
+                  className="text-sm leading-relaxed text-muted-foreground sm:text-base"
+                >
+                  {active.subtitle}
+                </motion.p>
+              </AnimatePresence>
+            </div>
+            <div className="mt-10">
+              <a
+                href="#services"
+                className="focus-ring inline-flex items-center gap-2 rounded-full border border-border px-5 py-3.5 font-mono text-xs font-medium uppercase tracking-[0.12em] text-foreground transition-colors hover:bg-muted"
               >
-                {active.title}
-              </motion.h2>
-            </AnimatePresence>
+                Explore our services
+                <span aria-hidden="true">→</span>
+              </a>
+            </div>
           </div>
-          <div className="mt-6 min-h-16 max-w-xl">
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.p
-                key={active.id}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ ...SWAP_TRANSITION, delay: 0.05 }}
-                className="text-sm leading-relaxed text-muted-foreground sm:text-base"
-              >
-                {active.subtitle}
-              </motion.p>
-            </AnimatePresence>
-          </div>
-          <div className="mt-10">
-            <a
-              href="#services"
-              className="focus-ring inline-flex items-center gap-2 rounded-full border border-border px-5 py-3.5 font-mono text-xs font-medium uppercase tracking-[0.12em] text-foreground transition-colors hover:bg-muted"
-            >
-              Explore our services
-              <span aria-hidden="true">→</span>
-            </a>
-          </div>
-        </div>
 
-        <div className="hidden sm:block">
-          <CarouselControls
-            count={TESTIMONIALS.length}
-            activeIndex={activeIndex}
-            onAdvance={advance}
-            onSelect={setActiveIndex}
-          />
-        </div>
-      </div>
-
-      <div className="mt-12 sm:hidden">
-        <div
-          ref={viewportRef}
-          className="-mx-6 overflow-hidden py-2"
-          onPointerDown={onPointerDown}
-          onPointerMove={onPointerMove}
-          onPointerUp={onPointerEnd}
-          onPointerCancel={onPointerEnd}
-          style={{ touchAction: "pan-y" }}
-        >
-          <motion.div
-            className="flex items-stretch"
-            style={{
-              gap: `${GAP}px`,
-              paddingLeft: `${leadingInset}px`,
-              paddingRight: `${leadingInset}px`,
-            }}
-            animate={{ x: trackTranslate }}
-            transition={dragging ? { duration: 0 } : TRACK_TRANSITION}
-          >
-            {TESTIMONIALS.map((t, i) => (
-              <div
-                key={t.id}
-                className="shrink-0"
-                style={{ width: `${cardWidth}px` }}
-              >
-                {i === activeIndex ? (
-                  <TestimonialCard testimonial={t} active />
-                ) : (
-                  <TestimonialCard
-                    testimonial={t}
-                    active={false}
-                    onClick={() => setActiveIndex(i)}
-                  />
-                )}
-              </div>
-            ))}
-          </motion.div>
-        </div>
-
-        <div className="mt-8 flex justify-center">
-          <CarouselControls
-            count={TESTIMONIALS.length}
-            activeIndex={activeIndex}
-            onAdvance={advance}
-            onSelect={setActiveIndex}
-          />
-        </div>
-      </div>
-
-      <div className="mt-14 hidden sm:block lg:mt-20">
-        <div className="grid grid-cols-3 gap-4 lg:gap-6">
-          {TESTIMONIALS.map((t, i) => (
-            <TestimonialCard
-              key={t.id}
-              testimonial={t}
-              active={i === activeIndex}
-              onClick={() => setActiveIndex(i)}
+          <div className="hidden sm:block">
+            <CarouselControls
+              count={TESTIMONIALS.length}
+              activeIndex={activeIndex}
+              onAdvance={advance}
+              onSelect={setActiveIndex}
             />
-          ))}
+          </div>
         </div>
-      </div>
-      <SectionCorners />
-    </section>
+
+        <div className="mt-12 sm:hidden">
+          <div
+            ref={viewportRef}
+            className="-mx-6 overflow-hidden py-2"
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={onPointerEnd}
+            onPointerCancel={onPointerEnd}
+            style={{ touchAction: "pan-y" }}
+          >
+            <motion.div
+              className="flex items-stretch"
+              style={{
+                gap: `${GAP}px`,
+                paddingLeft: `${leadingInset}px`,
+                paddingRight: `${leadingInset}px`,
+              }}
+              animate={{ x: trackTranslate }}
+              transition={dragging ? { duration: 0 } : TRACK_TRANSITION}
+            >
+              {TESTIMONIALS.map((t, i) => (
+                <div
+                  key={t.id}
+                  className="shrink-0"
+                  style={{
+                    width: viewportWidth
+                      ? `${cardWidth}px`
+                      : "calc(100% - 88px)",
+                  }}
+                >
+                  {i === activeIndex ? (
+                    <TestimonialCard testimonial={t} active />
+                  ) : (
+                    <TestimonialCard
+                      testimonial={t}
+                      active={false}
+                      onClick={() => setActiveIndex(i)}
+                    />
+                  )}
+                </div>
+              ))}
+            </motion.div>
+          </div>
+
+          <div className="mt-8 flex justify-center">
+            <CarouselControls
+              count={TESTIMONIALS.length}
+              activeIndex={activeIndex}
+              onAdvance={advance}
+              onSelect={setActiveIndex}
+            />
+          </div>
+        </div>
+
+        <div className="mt-14 hidden sm:block lg:mt-20">
+          <div className="grid grid-cols-3 gap-4 lg:gap-6">
+            {TESTIMONIALS.map((t, i) => (
+              <TestimonialCard
+                key={t.id}
+                testimonial={t}
+                active={i === activeIndex}
+                onClick={() => setActiveIndex(i)}
+              />
+            ))}
+          </div>
+        </div>
+        <SectionCorners />
+      </section>
+    </MotionConfig>
   );
 }
 
@@ -279,13 +285,14 @@ function CarouselControls({
       <button
         type="button"
         onClick={() => onAdvance(-1)}
+        disabled={activeIndex === 0}
         aria-label="Previous challenge"
         className="focus-ring inline-flex h-8 w-8 items-center justify-center rounded-full bg-muted text-foreground transition-opacity hover:opacity-80"
       >
-        <ChevronLeft className="h-4 w-4" />
+        <ChevronLeft className="h-4 w-4" aria-hidden="true" />
       </button>
       <div
-        role="tablist"
+        role="group"
         aria-label="Business challenges"
         className="flex h-8 items-center gap-2 rounded-full bg-muted px-4"
       >
@@ -293,25 +300,30 @@ function CarouselControls({
           <button
             key={i}
             type="button"
-            role="tab"
-            aria-selected={i === activeIndex}
+            aria-pressed={i === activeIndex}
             aria-label={`Go to challenge ${i + 1}`}
             onClick={() => onSelect(i)}
-            className={`h-1.5 rounded-full transition-all duration-300 ${
-              i === activeIndex
-                ? "w-6 bg-foreground"
-                : "w-1.5 bg-muted-foreground/40 hover:bg-muted-foreground/70"
-            }`}
-          />
+            className="focus-ring flex h-8 w-8 items-center justify-center rounded-full"
+          >
+            <span
+              aria-hidden="true"
+              className={`h-1.5 rounded-full transition-[width,background-color] duration-300 ${
+                i === activeIndex
+                  ? "w-6 bg-foreground"
+                  : "w-1.5 bg-muted-foreground/40 hover:bg-muted-foreground/70"
+              }`}
+            />
+          </button>
         ))}
       </div>
       <button
         type="button"
         onClick={() => onAdvance(1)}
+        disabled={activeIndex === count - 1}
         aria-label="Next challenge"
         className="focus-ring inline-flex h-8 w-8 items-center justify-center rounded-full bg-muted text-foreground transition-opacity hover:opacity-80"
       >
-        <ChevronRight className="h-4 w-4" />
+        <ChevronRight className="h-4 w-4" aria-hidden="true" />
       </button>
     </div>
   );
@@ -336,7 +348,7 @@ function TestimonialCard({
       type={interactive ? "button" : undefined}
       onClick={onClick}
       animate={{
-        opacity: active ? 1 : 0.6,
+        opacity: 1,
       }}
       transition={SWAP_TRANSITION}
       className={`focus-ring relative flex min-h-50 w-full flex-col justify-between rounded-2xl p-6 text-left ring-1 transition-colors duration-300 sm:p-7 ${
@@ -364,6 +376,8 @@ function TestimonialCard({
             src={avatar}
             alt=""
             loading="lazy"
+            width={24}
+            height={24}
             className="absolute inset-0 m-auto h-6 w-6 dark:invert"
           />
         </div>

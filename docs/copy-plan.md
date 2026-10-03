@@ -4,7 +4,7 @@ Estado: primera implementación local para revisión en `codex/peracto-agentic-c
 
 ## Actualización de implementación
 
-La instrucción posterior del usuario pide mantener todos los componentes. Esta decisión sustituye las propuestas de retirar bloques descritas en el plan original: se conservan estructura, logo, shaders, carruseles, tarjetas, FAQ y animaciones. El carrusel de testimonios explica problemas de negocio sin atribuir citas a personas; Showcase presenta las cuatro ofertas; Community presenta capacidades; Pricing conserva sus tarjetas y selector para mostrar alcance o entregables.
+La instrucción posterior del usuario pide mantener los componentes. Esta decisión sustituye las propuestas de retirar bloques descritas en el plan original: se conservan estructura, logo, shaders, carruseles, tarjetas, FAQ y animaciones. El carrusel de testimonios explica problemas de negocio sin atribuir citas a personas; Showcase presenta las cuatro ofertas; Pricing conserva sus tarjetas y selector para mostrar alcance o entregables. La instrucción del 3 de octubre retira expresamente Community y su scroll horizontal fijado; también incorpora los nueve logos y el copy de experiencia internacional. La revisión de accesibilidad, performance y SEO se documenta en `site-audit.md`.
 
 Se mantiene el inglés de la web original para esta vista previa. El contacto confirmado por el usuario es `contacto@perac.to`; los CTA abren el correo y Contact navega al bloque de contacto.
 
