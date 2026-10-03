@@ -5,59 +5,59 @@ import SectionCorners from "@/components/SectionCorners.astro";
 import LogoMarquee from "@/components/LogoMarquee.astro";
 import FinalCTA from "@/components/FinalCTA.astro";
 import Footer from "@/components/Footer.astro";
+import Faq from "@/components/Faq.astro";
+import MotionControls from "@/components/MotionControls.astro";
 
 import { Header } from "@/components/header";
 import { LogoDither } from "@/components/logo-dither";
 import { Testimonials } from "@/components/testimonials";
 import { Showcase } from "@/components/showcase";
-import { Community } from "@/components/community";
 import { Pricing } from "@/components/pricing";
-import { Faq } from "@/components/faq";
 
 const heroStats = [
-  { label: "Components", value: "120+" },
-  { label: "Avg. Setup", value: "9 min" },
-  { label: "License", value: "Commercial" },
+  { label: "Engineering", value: "Agentic" },
+  { label: "Delivery", value: "Embedded" },
+  { label: "Leadership", value: "Fractional" },
 ];
 
 const scaffoldCards = [
   {
-    title: "Skip the blank canvas",
-    body: "Routing, tokens, and layout primitives are wired before you write a line of feature code.",
+    title: "Build with AI",
+    body: "Turn a product idea or operational bottleneck into software and agents your team can use.",
   },
   {
-    title: "Designed to be overwritten",
-    body: "Every component is a placeholder you can tear out the moment your real system arrives.",
+    title: "Work inside the problem",
+    body: "Bring engineers into your context to connect systems, deliver improvements, and transfer knowledge.",
   },
   {
-    title: "Stays out of your way",
-    body: "No proprietary abstractions, no hidden magic — just the conventions your team already uses.",
+    title: "Lead with clarity",
+    body: "Give technology and product decisions a clear owner, a practical roadmap, and executive perspective.",
   },
 ];
 
 const steps = [
   {
-    title: "Clone and run",
-    body: "Pull the repo, install dependencies, and the dev server boots a working app on the first try — no setup steps, no missing env vars.",
+    title: "Define the outcome",
+    body: "Understand the problem, establish a baseline, and agree on scope, access, and ownership.",
   },
   {
-    title: "Swap the placeholders",
-    body: "Replace copy, components, and tokens at your own pace. Each surface is intentionally generic so your brand drops in without resistance.",
+    title: "Build in context",
+    body: "Work with your team and systems. Use small releases to test assumptions and get feedback early.",
   },
   {
-    title: "Wire your real data",
-    body: "Routing and layout are already in place — point the templated views at your APIs and the structure carries the rest of the work.",
+    title: "Validate in operation",
+    body: "Check quality, adoption, and results against the starting point. Review agent behavior with real constraints.",
   },
   {
-    title: "Ship and iterate",
-    body: "Deploy on day one with a baseline that holds up to feedback, then evolve it as your product finds its real shape.",
+    title: "Transfer and evolve",
+    body: "Document the solution, transfer knowledge, and agree on what your team owns and where we stay involved.",
   },
 ];
 ---
 
-<Layout>
+<Layout title="Agentic development & Fractional CTO/CPO">
   <Header client:load />
-  <main id="main-content" class="flex-1">
+  <main id="main-content" tabindex="-1" class="flex-1">
     <section class="relative border-b border-border">
       <div class="grid grid-cols-1 lg:grid-cols-2">
         <div
@@ -67,23 +67,23 @@ const steps = [
             style="--enter-delay: 380ms"
             class="enter text-4xl font-medium leading-[1.05] tracking-tighter text-foreground sm:text-5xl lg:text-[4rem] xl:text-[5.5rem]"
           >
-            A baseline for products that move quickly.
+            Agentic engineering. Executive judgment.
           </h1>
           <div
             style="--enter-delay: 520ms"
             class="enter mt-10 flex flex-wrap items-center gap-6"
           >
             <a
-              href="#start"
+              href="mailto:contacto@perac.to"
               class="focus-ring inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-4 text-xs font-semibold uppercase tracking-[0.12em] text-background transition-opacity hover:opacity-90"
             >
-              Get Started
+              Discuss your project
             </a>
             <a
-              href="#why"
+              href="#services"
               class="focus-ring inline-flex items-center gap-2 rounded-full px-2 py-3 text-xs font-semibold uppercase tracking-[0.12em] text-foreground transition-colors hover:text-muted-foreground"
             >
-              Learn More
+              Explore services
               <span
                 class="inline-flex h-5 w-5 items-center justify-center rounded-full bg-foreground"
                 aria-hidden="true"
@@ -110,6 +110,7 @@ const steps = [
             light={0.8}
             brightness={0.5}
           />
+          <MotionControls />
         </div>
       </div>
 
@@ -121,8 +122,9 @@ const steps = [
             style="--enter-delay: 680ms"
             class="enter max-w-md text-base leading-relaxed text-muted-foreground sm:text-lg"
           >
-            Frame helps teams lock structure, hierarchy, and flow before color
-            and brand land — so the work ships sooner.
+            We build software and AI agents, embed with your team, and provide
+            the technology and product leadership to bring your plans into
+            operation.
           </p>
         </div>
         <div class="grid grid-cols-3 px-6 py-10 sm:px-10 lg:px-14">
@@ -132,7 +134,7 @@ const steps = [
                 <p class="text-xs font-medium tracking-wide text-muted-foreground sm:text-sm">
                   {stat.label}
                 </p>
-                <p class="mt-3 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+                <p class="mt-3 text-lg font-semibold tracking-tight text-foreground sm:text-2xl">
                   {stat.value}
                 </p>
               </div>
@@ -146,9 +148,9 @@ const steps = [
     <Reveal>
       <section class="relative border-b border-border p-6 sm:p-10 lg:p-14">
         <h2
-          class="overflow-hidden text-ellipsis whitespace-nowrap text-2xl font-semibold leading-[1.1] tracking-tight text-foreground sm:text-3xl lg:text-[2.5rem]"
+          class="text-balance text-2xl font-semibold leading-[1.1] tracking-tight text-foreground sm:text-3xl lg:text-[2.5rem]"
         >
-          A scaffold, not a finished product
+          From business priorities to working systems
         </h2>
 
         <div
@@ -163,7 +165,7 @@ const steps = [
                     "md:before:absolute md:before:-left-2 md:before:top-0 md:before:bottom-0 md:before:w-px md:before:bg-border md:before:content-[''] lg:before:-left-3",
                 ]}
               >
-                <h3 class="overflow-hidden text-ellipsis whitespace-nowrap text-lg font-semibold leading-tight tracking-tight text-foreground sm:text-xl">
+                <h3 class="text-balance text-lg font-semibold leading-tight tracking-tight text-foreground sm:text-xl">
                   {card.title}{" "}
                   <span
                     aria-hidden="true"
@@ -192,15 +194,15 @@ const steps = [
             <h2
               class="max-w-md text-2xl font-semibold leading-[1.15] tracking-tight text-foreground sm:text-3xl lg:text-[2rem]"
             >
-              <span class="text-muted-foreground">Trusted by teams at</span> Linear,
-              Vercel, Figma, and others
+              <span class="text-muted-foreground">Leading technology.</span>
+              Decades of global expertise.
             </h2>
             <p
               class="mt-12 max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base"
             >
-              Product teams reach for Frame when they need to skip the
-              blank-canvas phase and get a working scaffold in front of
-              stakeholders by end of week.
+              We use the best technologies on the market, backed by senior
+              engineering talent and international expertise. Our team brings
+              decades of experience building services used by billions of users.
             </p>
           </article>
           <div
@@ -220,12 +222,15 @@ const steps = [
     </Reveal>
 
     <Reveal>
-      <section class="relative border-b border-border">
+      <section
+        id="approach"
+        class="relative scroll-mt-24 border-b border-border"
+      >
         <div class="px-6 pt-6 sm:px-10 sm:pt-10 lg:px-14 lg:pt-14">
           <h2
             class="text-2xl font-semibold leading-[1.1] tracking-tight text-foreground sm:text-3xl lg:text-[2.5rem]"
           >
-            How Frame fits into your stack
+            From the problem to production
           </h2>
         </div>
 
@@ -251,10 +256,10 @@ const steps = [
           class="px-6 pb-6 pt-10 sm:px-10 sm:pb-10 sm:pt-12 lg:px-14 lg:pb-14"
         >
           <a
-            href="#docs"
+            href="#engagements"
             class="focus-ring inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-3.5 font-mono text-xs font-medium uppercase tracking-[0.12em] text-background transition-opacity hover:opacity-90"
           >
-            Read the docs
+            Find your engagement
             <span aria-hidden="true">→</span>
           </a>
         </div>
@@ -268,16 +273,15 @@ const steps = [
     <Reveal>
       <Showcase client:visible />
     </Reveal>
-    <Community client:visible />
     <Reveal>
       <Pricing client:visible />
     </Reveal>
     <Reveal>
-      <Faq client:visible />
+      <Faq />
+    </Reveal>
+    <Reveal>
+      <FinalCTA />
     </Reveal>
   </main>
-  <Reveal>
-    <FinalCTA />
-  </Reveal>
   <Footer />
 </Layout>

@@ -1,10 +1,17 @@
 import { Menu, X } from "lucide-react";
-import { useEffect, useState, type ReactNode } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type MouseEvent,
+  type ReactNode,
+} from "react";
+import { containFocus } from "@/lib/focus";
 
 const primaryLinks = [
-  { label: "Layouts", href: "#layouts" },
-  { label: "System", href: "#system" },
-  { label: "Docs", href: "#docs" },
+  { label: "Services", href: "#services" },
+  { label: "Approach", href: "#approach" },
+  { label: "Engagements", href: "#engagements" },
 ];
 
 const mobileLinks = [
@@ -13,10 +20,9 @@ const mobileLinks = [
 ];
 
 const utilityLinks = [
-  { label: "License", href: "#license" },
-  { label: "Security", href: "#security" },
-  { label: "Privacy", href: "#privacy" },
-  { label: "Terms", href: "#terms" },
+  { label: "FAQs", href: "#faq" },
+  { label: "Contact", href: "#contact" },
+  { label: "contacto@perac.to", href: "mailto:contacto@perac.to" },
 ];
 
 function Logo(): ReactNode {
@@ -48,8 +54,21 @@ function Logo(): ReactNode {
 export function Header(): ReactNode {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const closeMenu = (): void => setIsOpen(false);
+  const followLink = (event: MouseEvent<HTMLAnchorElement>): void => {
+    closeMenu();
+    const href = event.currentTarget.getAttribute("href");
+    if (href?.startsWith("#")) {
+      requestAnimationFrame(() => {
+        const target = document.getElementById(href.slice(1));
+        target?.setAttribute("tabindex", "-1");
+        target?.focus({ preventScroll: true });
+      });
+    }
+  };
 
   useEffect(() => {
     const handleScroll = (): void => {
@@ -67,15 +86,32 @@ export function Header(): ReactNode {
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     document.body.classList.add("nav-open");
+    const restoreFocus = headerRef.current
+      ? containFocus(
+          headerRef.current,
+          closeMenu,
+          menuRef.current?.querySelector("a")
+        )
+      : undefined;
+    const desktop = window.matchMedia("(min-width: 1024px)");
+    const onResize = () => {
+      if (desktop.matches) closeMenu();
+    };
+    desktop.addEventListener("change", onResize);
 
     return () => {
       document.body.style.overflow = originalOverflow;
       document.body.classList.remove("nav-open");
+      desktop.removeEventListener("change", onResize);
+      restoreFocus?.();
     };
   }, [isOpen]);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80">
+    <header
+      ref={headerRef}
+      className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80"
+    >
       <span
         aria-hidden="true"
         className="pointer-events-none absolute bottom-0 left-0 z-10 h-[7px] w-[7px] -translate-x-1/2 translate-y-1/2 border border-border bg-background"
@@ -108,36 +144,38 @@ export function Header(): ReactNode {
 
         <div className="ml-auto hidden items-center gap-4 lg:flex">
           <a
-            href="#signin"
+            href="#contact"
             style={{ ["--enter-delay" as string]: "260ms" }}
             className="focus-ring enter rounded-full px-2 py-1.5 text-sm font-medium text-foreground transition-colors hover:text-muted-foreground"
           >
-            Sign In
+            Contact
           </a>
           <a
-            href="#start"
+            href="mailto:contacto@perac.to"
             style={{ ["--enter-delay" as string]: "320ms" }}
             className={`focus-ring enter rounded-full px-5 py-2.5 text-sm font-medium text-foreground transition-[background-color] duration-300 ease-out hover:text-muted-foreground ${
               isScrolled ? "bg-transparent" : "bg-muted hover:bg-border"
             }`}
           >
-            Open Frame
+            Let’s talk
           </a>
         </div>
 
         <div className="ml-auto flex items-center gap-2 lg:hidden">
           <a
-            href="#start"
+            href="mailto:contacto@perac.to"
             style={{ ["--enter-delay" as string]: "120ms" }}
             className="focus-ring enter rounded-full bg-muted px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-border"
           >
-            Open Frame
+            Let’s talk
           </a>
           <button
             type="button"
             style={{ ["--enter-delay" as string]: "180ms" }}
             className="focus-ring enter inline-flex h-10 w-10 items-center justify-center rounded-full bg-muted text-foreground transition-colors hover:bg-border"
-            aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-label={
+              isOpen ? "Close navigation menu" : "Open navigation menu"
+            }
             aria-expanded={isOpen}
             aria-controls="mobile-navigation"
             onClick={() => setIsOpen((open) => !open)}
@@ -153,7 +191,10 @@ export function Header(): ReactNode {
 
       <div
         id="mobile-navigation"
-        className={`fixed inset-x-0 top-16 z-40 min-h-[calc(100dvh-4rem)] border-t border-border bg-background transition-[opacity,visibility] duration-200 sm:top-20 sm:min-h-[calc(100dvh-5rem)] lg:hidden ${
+        ref={menuRef}
+        inert={!isOpen}
+        aria-hidden={!isOpen}
+        className={`fixed inset-x-0 top-16 z-40 h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain border-t border-border bg-background transition-opacity duration-200 sm:top-20 sm:h-[calc(100dvh-5rem)] lg:hidden ${
           isOpen
             ? "visible opacity-100"
             : "invisible pointer-events-none opacity-0"
@@ -167,7 +208,7 @@ export function Header(): ReactNode {
                   <a
                     href={link.href}
                     className="focus-ring block rounded-lg text-4xl font-normal leading-tight tracking-[-0.04em] text-foreground transition-colors hover:text-muted-foreground sm:text-5xl"
-                    onClick={closeMenu}
+                    onClick={followLink}
                   >
                     {link.label}
                   </a>
@@ -178,14 +219,14 @@ export function Header(): ReactNode {
 
           <div className="mt-12 flex flex-col items-start gap-2 pb-10">
             <p className="text-base font-medium tracking-[-0.02em] text-muted-foreground">
-              Desk
+              Peracto
             </p>
             {utilityLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
                 className="focus-ring rounded-md text-base font-normal text-foreground transition-colors hover:text-muted-foreground"
-                onClick={closeMenu}
+                onClick={followLink}
               >
                 {link.label}
               </a>

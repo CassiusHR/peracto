@@ -32,14 +32,29 @@ const { class: className, delay = 0 } = Astro.props;
         for (const entry of entries) {
           if (entry.isIntersecting) {
             entry.target.classList.add("is-visible");
+            entry.target.removeAttribute("data-reveal-pending");
             observer.unobserve(entry.target);
           }
         }
       },
-      { threshold: 0.2, rootMargin: "0px 0px -10% 0px" },
+      { threshold: 0.2, rootMargin: "0px 0px -10% 0px" }
     );
 
-    els.forEach((el) => observer.observe(el));
+    els.forEach((el) => {
+      // Content remains readable without JavaScript and while tabbing to it.
+      if (el.getBoundingClientRect().top > window.innerHeight) {
+        el.setAttribute("data-reveal-pending", "");
+        observer.observe(el);
+      }
+      el.addEventListener(
+        "focusin",
+        () => {
+          el.removeAttribute("data-reveal-pending");
+          observer.unobserve(el);
+        },
+        { once: true }
+      );
+    });
   };
 
   reveal();

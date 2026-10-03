@@ -1,0 +1,110 @@
+---
+import SectionCorners from "@/components/SectionCorners.astro";
+type FAQ = {
+  q: string;
+  a: ReadonlyArray<string>;
+};
+
+const FAQS: ReadonlyArray<FAQ> = [
+  {
+    q: "What do you mean by agentic development?",
+    a: [
+      "We use AI agents in the development process, with engineering review and validation. We can also build agents that operate within your business workflows. We define which capability your project needs before agreeing on scope.",
+    ],
+  },
+  {
+    q: "Can you work with our existing team?",
+    a: [
+      "Yes. Through Forward Deployed Engineering, we work within your context, coordinate responsibilities, and build alongside your team. The time commitment and working arrangement are agreed for each engagement.",
+    ],
+  },
+  {
+    q: "How is a fractional CTO or CPO different from an advisor?",
+    a: [
+      "A fractional CTO or CPO takes on an ongoing leadership mandate. An advisor provides analysis and recommendations to the people who retain that responsibility. Technology and product leadership can be scoped separately.",
+    ],
+  },
+  {
+    q: "Do we need a fully defined project?",
+    a: [
+      "We can start by clarifying the problem, priorities, and constraints. That gives us a basis for proposing the scope and the right way to work together.",
+    ],
+  },
+  {
+    q: "How do you use AI responsibly in delivery?",
+    a: [
+      "We agree on data boundaries, access, and tool use before the work begins. AI-assisted deliverables are reviewed and validated, and agents are evaluated against the permissions and acceptance criteria defined for the project.",
+    ],
+  },
+  {
+    q: "How is an engagement priced?",
+    a: [
+      "Pricing depends on scope, commitment, and responsibility. The proposal defines deliverables, terms, and acceptance criteria before work begins.",
+    ],
+  },
+  {
+    q: "What happens after delivery?",
+    a: [
+      "We agree on whether the work continues with our support or transfers to your team. Documentation, operation, and ongoing support are defined in the engagement scope.",
+    ],
+  },
+];
+---
+
+<section
+  id="faq"
+  aria-labelledby="faq-heading"
+  class="relative border-b border-border p-6 sm:p-10 lg:p-14"
+>
+  <h2
+    id="faq-heading"
+    class="text-3xl font-medium leading-[1.05] tracking-tighter text-foreground sm:text-4xl lg:text-[3.5rem]"
+  >
+    FAQs
+  </h2>
+  <div class="mt-6 border-t border-border sm:mt-10 lg:mt-14">
+    {
+      FAQS.map((faq, i) => (
+        <details
+          name="faq"
+          open={i === 0}
+          class="border-b border-border last:border-b-0"
+        >
+          <summary class="focus-ring flex cursor-pointer list-none items-center justify-between gap-6 py-6 text-left sm:py-7">
+            <h3 class="text-base font-medium leading-snug tracking-tight text-foreground sm:text-lg">
+              {faq.q}
+            </h3>
+            <span
+              aria-hidden="true"
+              class="faq-chevron inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-muted text-foreground transition-transform duration-200"
+            >
+              <svg
+                class="h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </span>
+          </summary>
+          <div class="max-w-3xl space-y-4 pb-7 pr-12 text-sm leading-relaxed text-muted-foreground sm:text-base">
+            {faq.a.map((paragraph) => (
+              <p>{paragraph}</p>
+            ))}
+          </div>
+        </details>
+      ))
+    }
+  </div>
+  <SectionCorners />
+</section>
+<style>
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  details[open] .faq-chevron {
+    transform: rotate(180deg);
+  }
+</style>

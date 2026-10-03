@@ -9,6 +9,7 @@ import {
   Triangle,
   Vec3,
 } from "ogl";
+import { createAnimationLoop } from "@/lib/animation-loop";
 import { useTheme } from "@/lib/use-theme";
 import { useEffect, useRef, type ReactNode } from "react";
 
@@ -174,8 +175,9 @@ export function LogoDither({
   brightness?: number;
 } = {}): ReactNode {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const loopRef = useRef<ReturnType<typeof createAnimationLoop> | null>(null);
   const { resolvedTheme } = useTheme();
-  const themeTargetRef = useRef(0);
+  const themeTargetRef = useRef(1);
   const variantRef = useRef(variant === "cta" ? 1 : 0);
 
   // live-tunable values read inside the render loop, so changing them does NOT
@@ -193,7 +195,8 @@ export function LogoDither({
   }, [variant]);
 
   useEffect(() => {
-    themeTargetRef.current = resolvedTheme === "dark" ? 1 : 0;
+    if (resolvedTheme)
+      themeTargetRef.current = resolvedTheme === "dark" ? 1 : 0;
   }, [resolvedTheme]);
 
   useEffect(() => {
@@ -266,7 +269,7 @@ export function LogoDither({
       },
     });
 
-    let renderTarget = new RenderTarget(gl, { width: 2, height: 2 });
+    const renderTarget = new RenderTarget(gl, { width: 2, height: 2 });
 
     const postProgram = new Program(gl, {
       vertex: postVertex,
@@ -278,7 +281,10 @@ export function LogoDither({
         uScene: { value: renderTarget.texture },
       },
     });
-    const postMesh = new Mesh(gl, { geometry: new Triangle(gl), program: postProgram });
+    const postMesh = new Mesh(gl, {
+      geometry: new Triangle(gl),
+      program: postProgram,
+    });
 
     const resize = (): void => {
       const { clientWidth, clientHeight } = container;
@@ -286,17 +292,16 @@ export function LogoDither({
       const w = Math.max(2, gl.drawingBufferWidth);
       const h = Math.max(2, gl.drawingBufferHeight);
       camera.perspective({ aspect: w / h });
-      renderTarget = new RenderTarget(gl, { width: w, height: h });
+      renderTarget.setSize(w, h);
       postProgram.uniforms.uScene.value = renderTarget.texture;
       postProgram.uniforms.iResolution.value = [w, h];
+      loopRef.current?.refresh();
     };
 
     const ro = new ResizeObserver(resize);
     ro.observe(container);
 
-    let frameId = 0;
     let disposed = false;
-    const reduceMotion = prefersReducedMotion();
     let last = performance.now();
 
     GLTFLoader.load(gl, modelSrc)
@@ -305,7 +310,9 @@ export function LogoDither({
 
         // pick the logo primitive (most vertices) and skip the stray cube
         for (const root of gltf.scene ?? []) root.updateMatrixWorld?.(true);
-        const primitives = (gltf.meshes ?? []).flatMap((m) => m.primitives ?? []);
+        const primitives = (gltf.meshes ?? []).flatMap(
+          (m) => m.primitives ?? []
+        );
         if (primitives.length === 0) return;
         const vcount = (p: (typeof primitives)[number]): number =>
           (p.geometry.attributes.position?.count as number | undefined) ?? 0;
@@ -316,12 +323,18 @@ export function LogoDither({
         // the mesh comes out squished when rebuilt from geometry alone.
         logo.updateMatrixWorld?.(true);
         const wScale = new Vec3(1, 1, 1);
-        (logo.worldMatrix as unknown as { getScaling: (v: Vec3) => void }).getScaling(wScale);
+        (
+          logo.worldMatrix as unknown as { getScaling: (v: Vec3) => void }
+        ).getScaling(wScale);
 
         const geometry = logo.geometry;
         geometry.computeBoundingBox();
         const { min, max } = geometry.bounds;
-        const wScaleArr = [Math.abs(wScale.x), Math.abs(wScale.y), Math.abs(wScale.z)];
+        const wScaleArr = [
+          Math.abs(wScale.x),
+          Math.abs(wScale.y),
+          Math.abs(wScale.z),
+        ];
         const extents = [
           (max.x - min.x) * wScaleArr[0],
           (max.y - min.y) * wScaleArr[1],
@@ -332,7 +345,11 @@ export function LogoDither({
         // smallest *world* extent = extrusion depth
         const depthAxis = extents.indexOf(Math.min(...extents));
         const baseSc = [wScale.x * f, wScale.y * f, wScale.z * f];
-        const center = [(min.x + max.x) / 2, (min.y + max.y) / 2, (min.z + max.z) / 2];
+        const center = [
+          (min.x + max.x) / 2,
+          (min.y + max.y) / 2,
+          (min.z + max.z) / 2,
+        ];
 
         const mesh = new Mesh(gl, { geometry, program: logoProgram });
         const applyDepth = (): void => {
@@ -357,7 +374,7 @@ export function LogoDither({
           const dt = Math.min((now - last) / 1000, 0.05);
           last = now;
 
-          if (!reduceMotion) {
+          if (!prefersReducedMotion()) {
             spinAngle = (spinAngle + spinSpeedRef.current * dt) % (Math.PI * 2);
           }
           // spin around an arbitrary axis (tilt from view axis + lean direction)
@@ -382,10 +399,9 @@ export function LogoDither({
 
           renderer.render({ scene, camera, target: renderTarget });
           renderer.render({ scene: postMesh });
-
-          frameId = requestAnimationFrame(render);
         };
-        render();
+        container.classList.add("webgl-ready");
+        loopRef.current = createAnimationLoop(container, render);
       })
       .catch(() => {
         /* model failed to load — leave the panel blank */
@@ -393,7 +409,9 @@ export function LogoDither({
 
     return () => {
       disposed = true;
-      cancelAnimationFrame(frameId);
+      loopRef.current?.dispose();
+      loopRef.current = null;
+      container.classList.remove("webgl-ready");
       ro.disconnect();
       if (gl.canvas.parentElement === container) {
         container.removeChild(gl.canvas);
@@ -404,11 +422,33 @@ export function LogoDither({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modelSrc]);
 
+  useEffect(() => {
+    loopRef.current?.refresh();
+  }, [
+    resolvedTheme,
+    variant,
+    spinSpeed,
+    axisTilt,
+    axisDir,
+    depthScale,
+    ambient,
+    light,
+    brightness,
+  ]);
+
   return (
     <div
       ref={containerRef}
       className="absolute inset-0 h-full w-full"
       aria-hidden="true"
-    />
+    >
+      <img
+        src="/peracto-icon.svg"
+        alt=""
+        width={128}
+        height={128}
+        className="logo-fallback absolute inset-0 m-auto h-32 w-32 dark:invert"
+      />
+    </div>
   );
 }

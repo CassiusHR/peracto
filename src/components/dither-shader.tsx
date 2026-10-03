@@ -1,4 +1,5 @@
 import { Mesh, Program, Renderer, Triangle } from "ogl";
+import { createAnimationLoop } from "@/lib/animation-loop";
 import { useTheme } from "@/lib/use-theme";
 import { useEffect, useRef, type ReactNode } from "react";
 
@@ -131,6 +132,7 @@ export function DitherShader({
   tone,
 }: { variant?: DitherVariant; tone?: DitherTone } = {}): ReactNode {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const loopRef = useRef<ReturnType<typeof createAnimationLoop> | null>(null);
   const { resolvedTheme } = useTheme();
 
   const themeTargetRef = useRef(1);
@@ -219,6 +221,7 @@ export function DitherShader({
         target.x = current.x;
         target.y = current.y;
       }
+      loopRef.current?.refresh();
     };
 
     const handlePointerMove = (event: PointerEvent): void => {
@@ -237,10 +240,11 @@ export function DitherShader({
     ro.observe(container);
     resize();
 
-    window.addEventListener("pointermove", handlePointerMove, { passive: true });
+    container.addEventListener("pointermove", handlePointerMove, {
+      passive: true,
+    });
     container.addEventListener("pointerleave", handlePointerLeave);
 
-    let frameId = 0;
     const start = performance.now();
 
     const render = (): void => {
@@ -264,14 +268,14 @@ export function DitherShader({
       program.uniforms.iMouseActive.value = current.active;
 
       renderer.render({ scene: mesh });
-      frameId = requestAnimationFrame(render);
     };
-    render();
+    loopRef.current = createAnimationLoop(container, render);
 
     return () => {
-      cancelAnimationFrame(frameId);
+      loopRef.current?.dispose();
+      loopRef.current = null;
       ro.disconnect();
-      window.removeEventListener("pointermove", handlePointerMove);
+      container.removeEventListener("pointermove", handlePointerMove);
       container.removeEventListener("pointerleave", handlePointerLeave);
       if (gl.canvas.parentElement === container) {
         container.removeChild(gl.canvas);
@@ -279,6 +283,10 @@ export function DitherShader({
       gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
   }, []);
+
+  useEffect(() => {
+    loopRef.current?.refresh();
+  }, [resolvedTheme, variant, tone]);
 
   return (
     <div

@@ -1,16 +1,28 @@
-import { AnimatePresence, motion, type Transition } from "motion/react";
+import {
+  AnimatePresence,
+  MotionConfig,
+  motion,
+  type Transition,
+} from "motion/react";
+import { containFocus } from "@/lib/focus";
 import {
   ChevronLeft,
   ChevronRight,
   Plus,
-  TrendingUp,
   Search,
   Layers,
   Boxes,
   Sparkles,
   type LucideIcon,
 } from "lucide-react";
-import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from "react";
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import { SectionCorners } from "@/components/section-corners";
 
 const MORPH_TRANSITION: Transition = {
@@ -27,34 +39,28 @@ type ShowcaseCard = {
 
 const CARDS: ReadonlyArray<ShowcaseCard> = [
   {
-    id: "flagship",
-    title: "Flagship\nLarge Cap",
-    Icon: TrendingUp,
-    body: "A long-horizon position in resilient, high-quality public companies. Built for compounding without the noise of short-term swings.",
-  },
-  {
-    id: "opportunities",
-    title: "Opportunities\nSmall Cap",
-    Icon: Search,
-    body: "Concentrated exposure to under-the-radar names with asymmetric upside. Researched in-house, screened for conviction, sized with discipline.",
-  },
-  {
-    id: "offshore",
-    title: "Offshore\nGlobal Equity",
-    Icon: Layers,
-    body: "International equity exposure across developed and emerging markets, balanced for currency, region, and sector concentration.",
-  },
-  {
-    id: "automated",
-    title: "Automated\nFixed Income",
-    Icon: Boxes,
-    body: "A rules-based bond ladder that rebalances itself as rates move. Designed for steady carry without the friction of manual trading.",
-  },
-  {
-    id: "ventures",
-    title: "Ventures\nPrivate Markets",
+    id: "agentic",
+    title: "Agentic\nDevelopment",
     Icon: Sparkles,
-    body: "Curated access to late-stage private deals previously walled off to institutions. One subscription, one portfolio, one set of fees.",
+    body: "We build software with AI agents and engineering review. We also develop agents connected to your systems, with defined permissions, evaluations, and human oversight.",
+  },
+  {
+    id: "forward",
+    title: "Forward Deployed\nEngineering",
+    Icon: Boxes,
+    body: "Engineers embedded in your context, working with your team, data, and systems. We build integrations, support deployment, and transfer the knowledge needed to operate them.",
+  },
+  {
+    id: "fractional",
+    title: "Fractional\nCTO / CPO",
+    Icon: Layers,
+    body: "Technology or product leadership with an agreed mandate and commitment. CTO work covers architecture and engineering; CPO work covers customer problems, priorities, and the product roadmap.",
+  },
+  {
+    id: "advisory",
+    title: "Executive\nAdvisory",
+    Icon: Search,
+    body: "Independent technical and product judgment for founders and executive teams. We assess options, investments, and risks, and support the people responsible for making the decision.",
   },
 ];
 
@@ -64,6 +70,7 @@ export function Showcase(): ReactNode {
   const [page, setPage] = useState(0);
   const [pageCount, setPageCount] = useState(1);
   const headingId = useId();
+  const closeCard = useCallback(() => setActiveId(null), []);
 
   const recompute = useCallback(() => {
     const track = trackRef.current;
@@ -123,109 +130,123 @@ export function Showcase(): ReactNode {
     if (!firstCard) return;
     const cardWidth = firstCard.getBoundingClientRect().width;
     const gap = parseFloat(getComputedStyle(track).columnGap || "0");
-    track.scrollBy({ left: direction * (cardWidth + gap), behavior: "smooth" });
+    track.scrollBy({
+      left: direction * (cardWidth + gap),
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "instant"
+        : "smooth",
+    });
   }, []);
 
-  const activeCard = activeId ? CARDS.find((c) => c.id === activeId) ?? null : null;
+  const activeCard = activeId
+    ? (CARDS.find((c) => c.id === activeId) ?? null)
+    : null;
 
   return (
-    <section
-      aria-labelledby={headingId}
-      className="relative border-b border-border"
-    >
-      <div className="grid grid-cols-1 lg:grid-cols-2">
-        <div className="flex flex-col justify-center px-6 py-16 sm:px-10 sm:py-20 lg:border-r lg:border-border lg:px-14 lg:py-24">
-          <h2
-            id={headingId}
-            className="text-4xl font-medium leading-[1.05] tracking-tighter text-foreground sm:text-5xl lg:text-[3.5rem] xl:text-[4rem]"
-          >
-            Built lean,
-            <br />
-            shipped fast,
-            <br />
-            <span className="text-muted-foreground">ready for your brand</span>
-          </h2>
-          <p className="mt-10 max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base">
-            Each surface is intentionally generic so your brand drops in
-            without resistance.
-          </p>
-          <div className="mt-10">
-            <a
-              href="#offerings"
-              className="focus-ring inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-4 text-xs font-semibold uppercase tracking-[0.12em] text-background transition-opacity hover:opacity-90"
+    <MotionConfig reducedMotion="user">
+      <section
+        id="services"
+        aria-labelledby={headingId}
+        className="relative border-b border-border"
+      >
+        <div className="grid grid-cols-1 lg:grid-cols-2">
+          <div className="flex flex-col justify-center px-6 py-16 sm:px-10 sm:py-20 lg:border-r lg:border-border lg:px-14 lg:py-24">
+            <h2
+              id={headingId}
+              className="text-4xl font-medium leading-[1.05] tracking-tighter text-foreground sm:text-5xl lg:text-[3.5rem] xl:text-[4rem]"
             >
-              See Our Designs
-              <span aria-hidden="true">→</span>
-            </a>
-          </div>
-        </div>
-
-        <div className="relative flex flex-col overflow-hidden">
-          <div
-            ref={trackRef}
-            className="flex snap-x snap-mandatory items-stretch gap-4 overflow-x-auto scroll-smooth px-6 py-16 sm:gap-6 sm:px-10 sm:py-20 lg:px-14 lg:py-24 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
-          >
-            {CARDS.map((card) => (
-              <Card
-                key={card.id}
-                card={card}
-                hidden={activeId === card.id}
-                onClick={() => setActiveId(card.id)}
-              />
-            ))}
-            <div aria-hidden="true" className="shrink-0 basis-6 sm:basis-10 lg:basis-14" />
+              Build it.
+              <br />
+              Embed with us.
+              <br />
+              <span className="text-muted-foreground">Lead it forward.</span>
+            </h2>
+            <p className="mt-10 max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base">
+              Four ways to bring engineering and leadership into your business.
+              Choose the responsibility you need us to take on.
+            </p>
+            <div className="mt-10">
+              <a
+                href="mailto:contacto@perac.to"
+                className="focus-ring inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-4 text-xs font-semibold uppercase tracking-[0.12em] text-background transition-opacity hover:opacity-90"
+              >
+                Discuss your project
+                <span aria-hidden="true">→</span>
+              </a>
+            </div>
           </div>
 
-          <div className="flex items-center justify-center gap-2 px-6 pb-10 sm:px-10 sm:pb-12 lg:px-14 lg:pb-14">
-            <button
-              type="button"
-              onClick={() => scrollByCards(-1)}
-              disabled={page === 0}
-              aria-label="Previous card"
-              className="focus-ring inline-flex h-8 w-8 items-center justify-center rounded-full bg-muted text-foreground transition-opacity hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-30"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </button>
+          <div className="relative flex flex-col overflow-hidden">
             <div
-              role="tablist"
-              aria-label="Card progress"
-              className="flex h-8 items-center gap-2 rounded-full bg-muted px-4"
+              ref={trackRef}
+              className="flex snap-x snap-mandatory items-stretch gap-4 overflow-x-auto scroll-smooth px-6 py-16 sm:gap-6 sm:px-10 sm:py-20 lg:px-14 lg:py-24 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
             >
-              {Array.from({ length: pageCount }).map((_, i) => (
-                <span
-                  key={i}
-                  role="tab"
-                  aria-selected={i === page}
-                  className={`h-1.5 rounded-full transition-all duration-300 ${
-                    i === page ? "w-6 bg-foreground" : "w-1.5 bg-muted-foreground/40"
-                  }`}
+              {CARDS.map((card) => (
+                <Card
+                  key={card.id}
+                  card={card}
+                  hidden={activeId === card.id}
+                  onClick={() => setActiveId(card.id)}
                 />
               ))}
+              <div
+                aria-hidden="true"
+                className="shrink-0 basis-6 sm:basis-10 lg:basis-14"
+              />
             </div>
-            <button
-              type="button"
-              onClick={() => scrollByCards(1)}
-              disabled={page >= pageCount - 1}
-              aria-label="Next card"
-              className="focus-ring inline-flex h-8 w-8 items-center justify-center rounded-full bg-muted text-foreground transition-opacity hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-30"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </button>
+
+            <div className="flex items-center justify-center gap-2 px-6 pb-10 sm:px-10 sm:pb-12 lg:px-14 lg:pb-14">
+              <button
+                type="button"
+                onClick={() => scrollByCards(-1)}
+                disabled={page === 0}
+                aria-label="Previous card"
+                className="focus-ring inline-flex h-8 w-8 items-center justify-center rounded-full bg-muted text-foreground transition-opacity hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-30"
+              >
+                <ChevronLeft className="h-4 w-4" aria-hidden="true" />
+              </button>
+              <div
+                role="group"
+                aria-label="Card progress"
+                className="flex h-8 items-center gap-2 rounded-full bg-muted px-4"
+              >
+                {Array.from({ length: pageCount }).map((_, i) => (
+                  <span
+                    key={i}
+                    aria-hidden="true"
+                    className={`h-1.5 rounded-full transition-[width,background-color] duration-300 ${
+                      i === page
+                        ? "w-6 bg-foreground"
+                        : "w-1.5 bg-muted-foreground/40"
+                    }`}
+                  />
+                ))}
+              </div>
+              <button
+                type="button"
+                onClick={() => scrollByCards(1)}
+                disabled={page >= pageCount - 1}
+                aria-label="Next card"
+                className="focus-ring inline-flex h-8 w-8 items-center justify-center rounded-full bg-muted text-foreground transition-opacity hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-30"
+              >
+                <ChevronRight className="h-4 w-4" aria-hidden="true" />
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <AnimatePresence>
-        {activeCard ? (
-          <ExpandedCard
-            key="expanded"
-            card={activeCard}
-            onClose={() => setActiveId(null)}
-          />
-        ) : null}
-      </AnimatePresence>
-      <SectionCorners />
-    </section>
+        <AnimatePresence>
+          {activeCard ? (
+            <ExpandedCard
+              key="expanded"
+              card={activeCard}
+              onClose={closeCard}
+            />
+          ) : null}
+        </AnimatePresence>
+        <SectionCorners />
+      </section>
+    </MotionConfig>
   );
 }
 
@@ -254,7 +275,7 @@ function Card({
         transition={MORPH_TRANSITION}
         className="flex h-11 w-11 items-center justify-center rounded-full bg-background/60 text-foreground"
       >
-        <Icon className="h-4 w-4" strokeWidth={1.5} />
+        <Icon className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
       </motion.div>
       <div className="space-y-5">
         <motion.h3
@@ -291,11 +312,29 @@ function ExpandedCard({
   onClose: () => void;
 }): ReactNode {
   const { Icon } = card;
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const titleId = useId();
+  useEffect(() => {
+    if (dialogRef.current)
+      return containFocus(
+        dialogRef.current,
+        onClose,
+        dialogRef.current.querySelector<HTMLButtonElement>("[data-close-card]")
+      );
+  }, [onClose]);
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-6 sm:p-10">
+    <div
+      ref={dialogRef}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby={titleId}
+      tabIndex={-1}
+      className="fixed inset-0 z-[60] flex items-center justify-center p-6 sm:p-10"
+    >
       <motion.button
         type="button"
         aria-label="Close"
+        tabIndex={-1}
         onClick={onClose}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -307,18 +346,19 @@ function ExpandedCard({
       <motion.div
         layoutId={`card-${card.id}`}
         transition={MORPH_TRANSITION}
-        className="relative z-10 flex aspect-[3/4] w-full max-w-[420px] flex-col justify-between rounded-2xl bg-muted p-8 sm:aspect-auto sm:max-w-2xl sm:p-10 lg:p-12"
+        className="relative z-10 flex max-h-[calc(100dvh-3rem)] w-full max-w-[420px] flex-col justify-between overflow-y-auto overscroll-contain rounded-2xl bg-muted p-8 sm:max-h-[calc(100dvh-5rem)] sm:max-w-2xl sm:p-10 lg:p-12"
       >
         <motion.div
           layoutId={`card-icon-${card.id}`}
           transition={MORPH_TRANSITION}
           className="flex h-11 w-11 items-center justify-center rounded-full bg-background/60 text-foreground"
         >
-          <Icon className="h-4 w-4" strokeWidth={1.5} />
+          <Icon className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
         </motion.div>
 
         <div className="mt-8 space-y-6 sm:mt-12">
           <motion.h3
+            id={titleId}
             layoutId={`card-title-${card.id}`}
             transition={MORPH_TRANSITION}
             className="whitespace-pre-line text-2xl font-medium leading-tight tracking-tight text-foreground sm:text-3xl lg:text-4xl"
@@ -329,12 +369,17 @@ function ExpandedCard({
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 8 }}
-            transition={{ duration: 0.35, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
+            transition={{
+              duration: 0.35,
+              delay: 0.18,
+              ease: [0.22, 1, 0.36, 1],
+            }}
             className="max-w-prose text-sm leading-relaxed text-muted-foreground sm:text-base"
           >
             {card.body}
           </motion.p>
           <motion.button
+            data-close-card
             type="button"
             onClick={onClose}
             layoutId={`card-plus-${card.id}`}

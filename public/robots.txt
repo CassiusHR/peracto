@@ -3,4 +3,4 @@ Allow: /
 Disallow: /api/
 Disallow: /private/
 
-Sitemap: https://perac.to/sitemap-index.xml
+# Crawlers must be able to read the noindex meta tag and response header.
