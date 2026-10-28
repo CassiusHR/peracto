@@ -1,5 +1,16 @@
 ---
 import { DitherShader } from "@/components/dither-shader";
+import {
+  CONTACT_EMAIL,
+  CONTACT_HREF,
+  type SiteCopy,
+} from "@/i18n/site-copy";
+
+interface Props {
+  copy: SiteCopy["contact"];
+}
+
+const { copy } = Astro.props;
 ---
 
 <section id="contact" class="scroll-mt-24 bg-background p-6 sm:p-10 lg:p-14">
@@ -13,26 +24,26 @@ import { DitherShader } from "@/components/dither-shader";
         <h2
           class="max-w-md text-3xl font-medium leading-[1.1] tracking-tight sm:text-4xl lg:text-[2.5rem]"
         >
-          What do you need to build or resolve?
+          {copy.title}
         </h2>
         <p
           class="mt-6 max-w-md text-base leading-relaxed text-muted-foreground"
         >
-          Tell us what is holding your business back and what needs to change.
+          {copy.body}
         </p>
         <div class="mt-10">
           <a
-            href="mailto:contacto@perac.to"
+            href={CONTACT_HREF}
             class="focus-ring inline-flex items-center gap-2 rounded-full bg-neutral-950 px-5 py-3.5 font-mono text-xs font-medium uppercase tracking-[0.12em] text-neutral-50 transition-opacity hover:opacity-90 dark:bg-neutral-50 dark:text-neutral-950"
           >
-            Discuss your project
+            {copy.cta}
             <span aria-hidden="true">→</span>
           </a>
         </div>
         <a
-          href="mailto:contacto@perac.to"
+          href={CONTACT_HREF}
           class="focus-ring mt-5 w-fit rounded-sm text-sm text-muted-foreground underline underline-offset-4"
-          >contacto@perac.to</a
+          >{CONTACT_EMAIL}</a
         >
       </div>
 

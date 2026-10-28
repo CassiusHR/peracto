@@ -4,12 +4,8 @@
  */
 export const siteConfig = {
   name: "Peracto",
-  description:
-    "Agentic development, Forward Deployed Engineering, Fractional CTO/CPO, and executive advisory. Software and leadership for your next business challenge.",
   url: "https://perac.to",
   ogImage: "/og-image.png",
-  locale: "en_US",
-  lang: "en",
   keywords: [
     "agentic development",
     "AI agents",

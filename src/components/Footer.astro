@@ -1,28 +1,40 @@
 ---
+import {
+  CONTACT_EMAIL,
+  CONTACT_HREF,
+  getCopy,
+  type Lang,
+} from "@/i18n/site-copy";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = getCopy(lang);
+
 const linkColumns = [
   {
-    label: "Peracto",
+    label: t.footer.company,
     items: [
-      { label: "Home", href: "#main-content" },
-      { label: "Approach", href: "#approach" },
-      { label: "Engagements", href: "#engagements" },
+      { label: t.nav.home, href: "#main-content" },
+      { label: t.nav.services, href: "#services" },
+      { label: t.nav.approach, href: "#approach" },
     ],
   },
   {
-    label: "Services",
-    items: [
-      { label: "Agentic Development", href: "#services" },
-      { label: "Forward Deployed Engineering", href: "#services" },
-      { label: "Fractional CTO / CPO", href: "#services" },
-      { label: "Executive Advisory", href: "#services" },
-    ],
+    label: t.footer.servicesLabel,
+    items: t.services.cards.map((card) => ({
+      label: card.title.replace("\n", " "),
+      href: "#services",
+    })),
   },
   {
-    label: "Connect",
+    label: t.footer.connect,
     items: [
-      { label: "FAQs", href: "#faq" },
-      { label: "Contact", href: "#contact" },
-      { label: "contacto@perac.to", href: "mailto:contacto@perac.to" },
+      { label: t.nav.faq, href: "#faq" },
+      { label: t.nav.contact, href: "#contact" },
+      { label: CONTACT_EMAIL, href: CONTACT_HREF },
     ],
   },
 ];
@@ -40,30 +52,21 @@ const year = new Date().getFullYear();
           href="#main-content"
           class="focus-ring inline-flex items-center gap-2 rounded-sm text-sm text-neutral-100 transition-colors hover:text-white dark:text-neutral-900 dark:hover:text-black"
         >
-          Back to top
+          {t.footer.backToTop}
           <span aria-hidden="true">↑</span>
         </a>
       </div>
 
       <nav
-        aria-label="Footer"
+        aria-label={t.a11y.footerNav}
         class="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-3 lg:gap-x-12"
       >
         {
           linkColumns.map((column) => (
             <div>
-              {column.label ? (
-                <p class="mb-5 text-sm text-neutral-500 dark:text-neutral-500">
+              <p class="mb-5 text-sm text-neutral-500 dark:text-neutral-500">
                   {column.label}
                 </p>
-              ) : (
-                <p
-                  class="mb-5 text-sm text-neutral-500 dark:text-neutral-500"
-                  aria-hidden="true"
-                >
-                  &nbsp;
-                </p>
-              )}
               <ul class="space-y-3">
                 {column.items.map((item) => (
                   <li>
@@ -83,10 +86,10 @@ const year = new Date().getFullYear();
 
       <div class="lg:pt-px">
         <a
-          href="mailto:contacto@perac.to"
+          href={CONTACT_HREF}
           class="focus-ring inline-flex items-center gap-2 rounded-full border border-neutral-700 px-5 py-3 text-xs font-semibold uppercase tracking-[0.12em] text-neutral-100 transition-colors hover:border-neutral-500 dark:border-neutral-300 dark:text-neutral-900 dark:hover:border-neutral-500"
         >
-          Talk to the team
+          {t.footer.cta}
           <span aria-hidden="true">→</span>
         </a>
       </div>
@@ -114,7 +117,7 @@ const year = new Date().getFullYear();
       </div>
 
       <p class="text-sm text-neutral-500 dark:text-neutral-500">
-        © {year} Peracto. All rights reserved.
+        © {year} Peracto. {t.footer.rights}
       </p>
     </div>
   </div>
