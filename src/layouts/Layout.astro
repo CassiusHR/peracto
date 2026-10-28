@@ -1,23 +1,30 @@
 ---
 import "@/styles/global.css";
 import { siteConfig } from "@/lib/config";
-import SkipToContent from "@/components/SkipToContent.astro";
+import { getCopy, homePath, type Lang } from "@/i18n/site-copy";
 
 interface Props {
+  lang?: Lang;
   title?: string;
   description?: string;
 }
 
-const { title, description = siteConfig.description } = Astro.props;
+const { lang = "en" } = Astro.props;
+const t = getCopy(lang);
+const { title = t.meta.title, description = t.meta.description } = Astro.props;
 
-const pageTitle = title ? `${title} | ${siteConfig.name}` : siteConfig.name;
-const canonical = new URL(Astro.url.pathname, Astro.site ?? siteConfig.url)
-  .href;
+const base = Astro.site ?? siteConfig.url;
+const pageTitle = `${title} | ${siteConfig.name}`;
+const canonical = new URL(Astro.url.pathname, base).href;
+const alternates = Object.entries(homePath).map(([hreflang, path]) => ({
+  hreflang,
+  href: new URL(path, base).href,
+}));
 const ogImage = new URL(siteConfig.ogImage, Astro.site ?? siteConfig.url).href;
 ---
 
 <!doctype html>
-<html lang={siteConfig.lang} class="dark">
+<html lang={lang} class="dark">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -26,6 +33,8 @@ const ogImage = new URL(siteConfig.ogImage, Astro.site ?? siteConfig.url).href;
     <meta name="robots" content="noindex, follow" />
     <meta name="generator" content={Astro.generator} />
     <link rel="canonical" href={canonical} />
+    {alternates.map((alt) => <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />)}
+    <link rel="alternate" hreflang="x-default" href={new URL(homePath.en, base).href} />
 
     <!-- Default: white mark on black circle (older browsers / no media support) -->
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -57,7 +66,7 @@ const ogImage = new URL(siteConfig.ogImage, Astro.site ?? siteConfig.url).href;
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
-    <meta property="og:locale" content={siteConfig.locale} />
+    <meta property="og:locale" content={t.locale} />
     <meta property="og:url" content={canonical} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
@@ -67,7 +76,7 @@ const ogImage = new URL(siteConfig.ogImage, Astro.site ?? siteConfig.url).href;
     <meta property="og:image:height" content="630" />
     <meta
       property="og:image:alt"
-      content="Peracto — Agentic engineering. Executive judgment."
+      content={t.meta.ogAlt}
     />
 
     <!-- Twitter -->
@@ -77,7 +86,7 @@ const ogImage = new URL(siteConfig.ogImage, Astro.site ?? siteConfig.url).href;
     <meta name="twitter:image" content={ogImage} />
     <meta
       name="twitter:image:alt"
-      content="Peracto — Agentic engineering. Executive judgment."
+      content={t.meta.ogAlt}
     />
 
     <link rel="manifest" href="/site.webmanifest" />
@@ -94,7 +103,7 @@ const ogImage = new URL(siteConfig.ogImage, Astro.site ?? siteConfig.url).href;
   <body
     class="min-h-screen bg-background font-sans text-foreground antialiased"
   >
-    <SkipToContent />
+    <a href="#main-content" class="skip-to-content">{t.a11y.skip}</a>
     <div
       class="mx-auto flex min-h-screen w-[calc(100%-1.5rem)] max-w-[1440px] flex-col border-x border-border sm:w-[calc(100%-2.5rem)] lg:w-[calc(100%-3rem)]"
     >

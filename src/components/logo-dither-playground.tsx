@@ -32,9 +32,9 @@ function Slider({
 }): ReactNode {
   return (
     <label className="flex flex-col gap-2">
-      <span className="flex items-center justify-between text-xs uppercase tracking-[0.15em] text-muted-foreground">
+      <span className="text-muted-foreground flex items-center justify-between text-xs tracking-[0.15em] uppercase">
         <span>{label}</span>
-        <span className="font-mono text-foreground">
+        <span className="text-foreground font-mono">
           {value.toFixed(decimals)}
           {unit}
         </span>
@@ -46,7 +46,7 @@ function Slider({
         step={step}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="h-1 w-full cursor-pointer appearance-none rounded-full bg-border accent-foreground"
+        className="bg-border accent-foreground h-1 w-full cursor-pointer appearance-none rounded-full"
       />
     </label>
   );
@@ -90,7 +90,7 @@ export function LogoDitherPlayground(): ReactNode {
 
   return (
     <div className="flex w-full max-w-150 flex-col gap-6">
-      <div className="relative aspect-square w-full overflow-hidden rounded-2xl border border-border">
+      <div className="border-border relative aspect-square w-full overflow-hidden rounded-2xl border">
         <LogoDither
           spinSpeed={spinSpeed}
           axisTilt={axisTilt}
@@ -102,46 +102,107 @@ export function LogoDitherPlayground(): ReactNode {
         />
       </div>
 
-      <div className="flex flex-col gap-6 rounded-2xl border border-border p-5">
+      <div className="border-border flex flex-col gap-6 rounded-2xl border p-5">
         <div className="flex flex-col gap-5">
-          <span className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+          <span className="text-muted-foreground text-[0.65rem] font-semibold tracking-[0.2em] uppercase">
             Motion
           </span>
-          <Slider label="Spin speed" value={spinSpeed} min={0} max={2} step={0.05} decimals={2} unit=" rad/s" onChange={setSpinSpeed} />
-          <Slider label="Spin axis tilt" value={axisTilt} min={0} max={90} step={1} decimals={0} unit="°" onChange={setAxisTilt} />
-          <Slider label="Spin axis direction" value={axisDir} min={0} max={360} step={1} decimals={0} unit="°" onChange={setAxisDir} />
-          <Slider label="Depth" value={depthScale} min={0.05} max={1.5} step={0.05} decimals={2} unit="×" onChange={setDepthScale} />
+          <Slider
+            label="Spin speed"
+            value={spinSpeed}
+            min={0}
+            max={2}
+            step={0.05}
+            decimals={2}
+            unit=" rad/s"
+            onChange={setSpinSpeed}
+          />
+          <Slider
+            label="Spin axis tilt"
+            value={axisTilt}
+            min={0}
+            max={90}
+            step={1}
+            decimals={0}
+            unit="°"
+            onChange={setAxisTilt}
+          />
+          <Slider
+            label="Spin axis direction"
+            value={axisDir}
+            min={0}
+            max={360}
+            step={1}
+            decimals={0}
+            unit="°"
+            onChange={setAxisDir}
+          />
+          <Slider
+            label="Depth"
+            value={depthScale}
+            min={0.05}
+            max={1.5}
+            step={0.05}
+            decimals={2}
+            unit="×"
+            onChange={setDepthScale}
+          />
         </div>
 
-        <div className="flex flex-col gap-5 border-t border-border pt-5">
-          <span className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+        <div className="border-border flex flex-col gap-5 border-t pt-5">
+          <span className="text-muted-foreground text-[0.65rem] font-semibold tracking-[0.2em] uppercase">
             Lighting
           </span>
-          <Slider label="Ambient" value={ambient} min={0} max={1} step={0.01} decimals={2} onChange={setAmbient} />
-          <Slider label="Light intensity" value={light} min={0} max={2} step={0.05} decimals={2} onChange={setLight} />
-          <Slider label="Brightness" value={brightness} min={0} max={2} step={0.05} decimals={2} unit="×" onChange={setBrightness} />
+          <Slider
+            label="Ambient"
+            value={ambient}
+            min={0}
+            max={1}
+            step={0.01}
+            decimals={2}
+            onChange={setAmbient}
+          />
+          <Slider
+            label="Light intensity"
+            value={light}
+            min={0}
+            max={2}
+            step={0.05}
+            decimals={2}
+            onChange={setLight}
+          />
+          <Slider
+            label="Brightness"
+            value={brightness}
+            min={0}
+            max={2}
+            step={0.05}
+            decimals={2}
+            unit="×"
+            onChange={setBrightness}
+          />
         </div>
 
-        <div className="flex flex-col gap-2 border-t border-border pt-5">
-          <span className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+        <div className="border-border flex flex-col gap-2 border-t pt-5">
+          <span className="text-muted-foreground text-[0.65rem] font-semibold tracking-[0.2em] uppercase">
             Parameters (copy &amp; share)
           </span>
           <div className="flex items-stretch gap-2">
-            <code className="flex-1 overflow-x-auto rounded-lg border border-border bg-background px-3 py-2 font-mono text-xs leading-relaxed text-foreground">
+            <code className="border-border bg-background text-foreground flex-1 overflow-x-auto rounded-lg border px-3 py-2 font-mono text-xs leading-relaxed">
               {jsx}
             </code>
             <div className="flex shrink-0 flex-col gap-2">
               <button
                 type="button"
                 onClick={copy}
-                className="rounded-lg border border-border px-3 py-2 text-xs font-medium text-foreground transition-colors hover:bg-border"
+                className="border-border text-foreground hover:bg-border rounded-lg border px-3 py-2 text-xs font-medium transition-colors"
               >
                 {copied ? "Copied" : "Copy"}
               </button>
               <button
                 type="button"
                 onClick={reset}
-                className="rounded-lg border border-border px-3 py-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-border hover:text-foreground"
+                className="border-border text-muted-foreground hover:bg-border hover:text-foreground rounded-lg border px-3 py-2 text-xs font-medium transition-colors"
               >
                 Reset
               </button>

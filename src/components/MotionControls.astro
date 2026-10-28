@@ -1,10 +1,21 @@
+---
+interface Props {
+  pauseLabel: string;
+  resumeLabel: string;
+}
+
+const { pauseLabel, resumeLabel } = Astro.props;
+---
+
 <button
   type="button"
   data-motion-toggle
   hidden
+  data-pause-label={pauseLabel}
+  data-resume-label={resumeLabel}
   aria-pressed="false"
   class="focus-ring absolute right-4 bottom-4 z-10 min-h-10 rounded-full bg-muted px-4 text-xs font-medium text-foreground transition-colors hover:bg-border"
-  >Pause animations</button
+  >{pauseLabel}</button
 >
 
 <script>
@@ -18,7 +29,7 @@
     document.documentElement.classList.add("animations-enabled");
     button.hidden = media.matches;
     button.setAttribute("aria-pressed", String(paused));
-    button.textContent = paused ? "Resume animations" : "Pause animations";
+    button.textContent = (paused ? button.dataset.resumeLabel : button.dataset.pauseLabel) ?? "";
   };
   button?.addEventListener("click", () => {
     document.documentElement.classList.toggle("motion-paused");

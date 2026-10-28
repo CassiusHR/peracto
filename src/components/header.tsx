@@ -7,30 +7,38 @@ import {
   type ReactNode,
 } from "react";
 import { containFocus } from "@/lib/focus";
+import {
+  CONTACT_EMAIL,
+  CONTACT_HREF,
+  getCopy,
+  homePath,
+  otherLang,
+  type Lang,
+  type SiteCopy,
+} from "@/i18n/site-copy";
 
-const primaryLinks = [
-  { label: "Services", href: "#services" },
-  { label: "Approach", href: "#approach" },
-  { label: "Engagements", href: "#engagements" },
-];
+function getLinks(t: SiteCopy) {
+  const primary = [
+    { label: t.nav.services, href: "#services" },
+    { label: t.nav.approach, href: "#approach" },
+    { label: t.nav.faq, href: "#faq" },
+  ];
+  return {
+    primary,
+    mobile: [{ label: t.nav.home, href: "#main-content" }, ...primary],
+    utility: [
+      { label: t.nav.contact, href: "#contact" },
+      { label: CONTACT_EMAIL, href: CONTACT_HREF },
+    ],
+  };
+}
 
-const mobileLinks = [
-  { label: "Homepage", href: "#main-content" },
-  ...primaryLinks,
-];
-
-const utilityLinks = [
-  { label: "FAQs", href: "#faq" },
-  { label: "Contact", href: "#contact" },
-  { label: "contacto@perac.to", href: "mailto:contacto@perac.to" },
-];
-
-function Logo(): ReactNode {
+function Logo({ label }: { label: string }): ReactNode {
   return (
     <a
       href="#main-content"
-      className="focus-ring enter inline-flex items-center gap-2.5 rounded-sm text-foreground"
-      aria-label="Peracto home"
+      className="focus-ring enter text-foreground inline-flex items-center gap-2.5 rounded-sm"
+      aria-label={label}
     >
       <img
         src="/peracto-icon.svg"
@@ -51,7 +59,11 @@ function Logo(): ReactNode {
   );
 }
 
-export function Header(): ReactNode {
+export function Header({ lang }: { lang: Lang }): ReactNode {
+  const t = getCopy(lang);
+  const links = getLinks(t);
+  const altLang = otherLang(lang);
+  const altCopy = getCopy(altLang);
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
@@ -110,32 +122,32 @@ export function Header(): ReactNode {
   return (
     <header
       ref={headerRef}
-      className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80"
+      className="border-border bg-background/95 supports-backdrop-filter:bg-background/80 sticky top-0 z-50 border-b backdrop-blur"
     >
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute bottom-0 left-0 z-10 h-[7px] w-[7px] -translate-x-1/2 translate-y-1/2 border border-border bg-background"
+        className="border-border bg-background pointer-events-none absolute bottom-0 left-0 z-10 h-[7px] w-[7px] -translate-x-1/2 translate-y-1/2 border"
       />
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute bottom-0 right-0 z-10 h-[7px] w-[7px] translate-x-1/2 translate-y-1/2 border border-border bg-background"
+        className="border-border bg-background pointer-events-none absolute right-0 bottom-0 z-10 h-[7px] w-[7px] translate-x-1/2 translate-y-1/2 border"
       />
 
       <div className="flex h-16 items-center justify-between px-4 sm:h-20 sm:px-6 lg:px-8">
-        <Logo />
+        <Logo label={t.a11y.home} />
 
         <nav
           className={`hidden rounded-full px-2 py-1.5 transition-[background-color] duration-300 ease-out lg:ml-12 lg:flex lg:items-center lg:gap-1 ${
             isScrolled ? "bg-transparent" : "bg-muted"
           }`}
-          aria-label="Primary navigation"
+          aria-label={t.a11y.primaryNav}
         >
-          {primaryLinks.map((link, i) => (
+          {links.primary.map((link, i) => (
             <a
               key={link.href}
               href={link.href}
               style={{ ["--enter-delay" as string]: `${80 + i * 60}ms` }}
-              className="focus-ring enter rounded-full px-4 py-1.5 text-sm font-medium text-foreground transition-colors hover:text-muted-foreground"
+              className="focus-ring enter text-foreground hover:text-muted-foreground rounded-full px-4 py-1.5 text-sm font-medium transition-colors"
             >
               {link.label}
             </a>
@@ -144,38 +156,39 @@ export function Header(): ReactNode {
 
         <div className="ml-auto hidden items-center gap-4 lg:flex">
           <a
-            href="#contact"
+            href={homePath[altLang]}
+            hrefLang={altLang}
+            lang={altLang}
+            aria-label={altCopy.nav.switchLabel}
             style={{ ["--enter-delay" as string]: "260ms" }}
-            className="focus-ring enter rounded-full px-2 py-1.5 text-sm font-medium text-foreground transition-colors hover:text-muted-foreground"
+            className="focus-ring enter text-foreground hover:text-muted-foreground rounded-full px-2 py-1.5 font-mono text-xs font-medium tracking-[0.12em] transition-colors"
           >
-            Contact
+            {t.nav.switchShort}
           </a>
           <a
-            href="mailto:contacto@perac.to"
+            href={CONTACT_HREF}
             style={{ ["--enter-delay" as string]: "320ms" }}
-            className={`focus-ring enter rounded-full px-5 py-2.5 text-sm font-medium text-foreground transition-[background-color] duration-300 ease-out hover:text-muted-foreground ${
+            className={`focus-ring enter text-foreground hover:text-muted-foreground rounded-full px-5 py-2.5 text-sm font-medium transition-[background-color] duration-300 ease-out ${
               isScrolled ? "bg-transparent" : "bg-muted hover:bg-border"
             }`}
           >
-            Let’s talk
+            {t.nav.cta}
           </a>
         </div>
 
         <div className="ml-auto flex items-center gap-2 lg:hidden">
           <a
-            href="mailto:contacto@perac.to"
+            href={CONTACT_HREF}
             style={{ ["--enter-delay" as string]: "120ms" }}
-            className="focus-ring enter rounded-full bg-muted px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-border"
+            className="focus-ring enter bg-muted text-foreground hover:bg-border rounded-full px-4 py-2 text-sm font-medium transition-colors"
           >
-            Let’s talk
+            {t.nav.cta}
           </a>
           <button
             type="button"
             style={{ ["--enter-delay" as string]: "180ms" }}
-            className="focus-ring enter inline-flex h-10 w-10 items-center justify-center rounded-full bg-muted text-foreground transition-colors hover:bg-border"
-            aria-label={
-              isOpen ? "Close navigation menu" : "Open navigation menu"
-            }
+            className="focus-ring enter bg-muted text-foreground hover:bg-border inline-flex h-10 w-10 items-center justify-center rounded-full transition-colors"
+            aria-label={isOpen ? t.a11y.closeMenu : t.a11y.openMenu}
             aria-expanded={isOpen}
             aria-controls="mobile-navigation"
             onClick={() => setIsOpen((open) => !open)}
@@ -194,20 +207,20 @@ export function Header(): ReactNode {
         ref={menuRef}
         inert={!isOpen}
         aria-hidden={!isOpen}
-        className={`fixed inset-x-0 top-16 z-40 h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain border-t border-border bg-background transition-opacity duration-200 sm:top-20 sm:h-[calc(100dvh-5rem)] lg:hidden ${
+        className={`border-border bg-background fixed inset-x-0 top-16 z-40 h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain border-t transition-opacity duration-200 sm:top-20 sm:h-[calc(100dvh-5rem)] lg:hidden ${
           isOpen
             ? "visible opacity-100"
-            : "invisible pointer-events-none opacity-0"
+            : "pointer-events-none invisible opacity-0"
         }`}
       >
         <div className="min-h-[calc(100dvh-4rem)] px-4 pt-16 sm:min-h-[calc(100dvh-5rem)] sm:px-6 sm:pt-20">
-          <nav aria-label="Mobile navigation">
+          <nav aria-label={t.a11y.mobileNav}>
             <ul className="space-y-2">
-              {mobileLinks.map((link) => (
+              {links.mobile.map((link) => (
                 <li key={link.href}>
                   <a
                     href={link.href}
-                    className="focus-ring block rounded-lg text-4xl font-normal leading-tight tracking-[-0.04em] text-foreground transition-colors hover:text-muted-foreground sm:text-5xl"
+                    className="focus-ring text-foreground hover:text-muted-foreground block rounded-lg text-4xl leading-tight font-normal tracking-[-0.04em] transition-colors sm:text-5xl"
                     onClick={followLink}
                   >
                     {link.label}
@@ -218,19 +231,27 @@ export function Header(): ReactNode {
           </nav>
 
           <div className="mt-12 flex flex-col items-start gap-2 pb-10">
-            <p className="text-base font-medium tracking-[-0.02em] text-muted-foreground">
+            <p className="text-muted-foreground text-base font-medium tracking-[-0.02em]">
               Peracto
             </p>
-            {utilityLinks.map((link) => (
+            {links.utility.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
-                className="focus-ring rounded-md text-base font-normal text-foreground transition-colors hover:text-muted-foreground"
+                className="focus-ring text-foreground hover:text-muted-foreground rounded-md text-base font-normal transition-colors"
                 onClick={followLink}
               >
                 {link.label}
               </a>
             ))}
+            <a
+              href={homePath[altLang]}
+              hrefLang={altLang}
+              lang={altLang}
+              className="focus-ring text-foreground hover:text-muted-foreground mt-4 rounded-md text-base font-normal transition-colors"
+            >
+              {altCopy.nav.switchLabel}
+            </a>
           </div>
         </div>
       </div>

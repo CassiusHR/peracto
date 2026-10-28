@@ -24,47 +24,31 @@ import {
   type ReactNode,
 } from "react";
 import { SectionCorners } from "@/components/section-corners";
+import { CONTACT_HREF, type SiteCopy } from "@/i18n/site-copy";
 
 const MORPH_TRANSITION: Transition = {
   duration: 0.55,
   ease: [0.22, 1, 0.36, 1],
 };
 
-type ShowcaseCard = {
-  id: string;
-  title: string;
-  Icon: LucideIcon;
-  body: string;
+type ShowcaseCard = SiteCopy["services"]["cards"][number];
+type A11y = SiteCopy["a11y"];
+
+const ICONS: Record<string, LucideIcon> = {
+  agentic: Sparkles,
+  forward: Boxes,
+  fractional: Layers,
+  advisory: Search,
 };
 
-const CARDS: ReadonlyArray<ShowcaseCard> = [
-  {
-    id: "agentic",
-    title: "Agentic\nDevelopment",
-    Icon: Sparkles,
-    body: "We build software with AI agents and engineering review. We also develop agents connected to your systems, with defined permissions, evaluations, and human oversight.",
-  },
-  {
-    id: "forward",
-    title: "Forward Deployed\nEngineering",
-    Icon: Boxes,
-    body: "Engineers embedded in your context, working with your team, data, and systems. We build integrations, support deployment, and transfer the knowledge needed to operate them.",
-  },
-  {
-    id: "fractional",
-    title: "Fractional\nCTO / CPO",
-    Icon: Layers,
-    body: "Technology or product leadership with an agreed mandate and commitment. CTO work covers architecture and engineering; CPO work covers customer problems, priorities, and the product roadmap.",
-  },
-  {
-    id: "advisory",
-    title: "Executive\nAdvisory",
-    Icon: Search,
-    body: "Independent technical and product judgment for founders and executive teams. We assess options, investments, and risks, and support the people responsible for making the decision.",
-  },
-];
-
-export function Showcase(): ReactNode {
+export function Showcase({
+  copy,
+  a11y,
+}: {
+  copy: SiteCopy["services"];
+  a11y: A11y;
+}): ReactNode {
+  const CARDS = copy.cards;
   const [activeId, setActiveId] = useState<string | null>(null);
   const trackRef = useRef<HTMLDivElement | null>(null);
   const [page, setPage] = useState(0);
@@ -147,30 +131,27 @@ export function Showcase(): ReactNode {
       <section
         id="services"
         aria-labelledby={headingId}
-        className="relative border-b border-border"
+        className="border-border relative border-b"
       >
         <div className="grid grid-cols-1 lg:grid-cols-2">
-          <div className="flex flex-col justify-center px-6 py-16 sm:px-10 sm:py-20 lg:border-r lg:border-border lg:px-14 lg:py-24">
+          <div className="lg:border-border flex flex-col justify-center px-6 py-16 sm:px-10 sm:py-20 lg:border-r lg:px-14 lg:py-24">
             <h2
               id={headingId}
-              className="text-4xl font-medium leading-[1.05] tracking-tighter text-foreground sm:text-5xl lg:text-[3.5rem] xl:text-[4rem]"
+              className="text-foreground text-4xl leading-[1.05] font-medium tracking-tighter sm:text-5xl lg:text-[3.5rem] xl:text-[4rem]"
             >
-              Build it.
+              {copy.title[0]}
               <br />
-              Embed with us.
-              <br />
-              <span className="text-muted-foreground">Lead it forward.</span>
+              <span className="text-muted-foreground">{copy.title[1]}</span>
             </h2>
-            <p className="mt-10 max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base">
-              Four ways to bring engineering and leadership into your business.
-              Choose the responsibility you need us to take on.
+            <p className="text-muted-foreground mt-10 max-w-md text-sm leading-relaxed sm:text-base">
+              {copy.body}
             </p>
             <div className="mt-10">
               <a
-                href="mailto:contacto@perac.to"
-                className="focus-ring inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-4 text-xs font-semibold uppercase tracking-[0.12em] text-background transition-opacity hover:opacity-90"
+                href={CONTACT_HREF}
+                className="focus-ring bg-foreground text-background inline-flex items-center gap-2 rounded-full px-5 py-4 text-xs font-semibold tracking-[0.12em] uppercase transition-opacity hover:opacity-90"
               >
-                Discuss your project
+                {copy.cta}
                 <span aria-hidden="true">→</span>
               </a>
             </div>
@@ -179,7 +160,7 @@ export function Showcase(): ReactNode {
           <div className="relative flex flex-col overflow-hidden">
             <div
               ref={trackRef}
-              className="flex snap-x snap-mandatory items-stretch gap-4 overflow-x-auto scroll-smooth px-6 py-16 sm:gap-6 sm:px-10 sm:py-20 lg:px-14 lg:py-24 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+              className="flex snap-x snap-mandatory [scrollbar-width:none] items-stretch gap-4 overflow-x-auto scroll-smooth px-6 py-16 [-ms-overflow-style:none] sm:gap-6 sm:px-10 sm:py-20 lg:px-14 lg:py-24 [&::-webkit-scrollbar]:hidden"
             >
               {CARDS.map((card) => (
                 <Card
@@ -200,15 +181,15 @@ export function Showcase(): ReactNode {
                 type="button"
                 onClick={() => scrollByCards(-1)}
                 disabled={page === 0}
-                aria-label="Previous card"
-                className="focus-ring inline-flex h-8 w-8 items-center justify-center rounded-full bg-muted text-foreground transition-opacity hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-30"
+                aria-label={a11y.previousCard}
+                className="focus-ring bg-muted text-foreground inline-flex h-8 w-8 items-center justify-center rounded-full transition-opacity hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-30"
               >
                 <ChevronLeft className="h-4 w-4" aria-hidden="true" />
               </button>
               <div
                 role="group"
-                aria-label="Card progress"
-                className="flex h-8 items-center gap-2 rounded-full bg-muted px-4"
+                aria-label={a11y.cardProgress}
+                className="bg-muted flex h-8 items-center gap-2 rounded-full px-4"
               >
                 {Array.from({ length: pageCount }).map((_, i) => (
                   <span
@@ -216,8 +197,8 @@ export function Showcase(): ReactNode {
                     aria-hidden="true"
                     className={`h-1.5 rounded-full transition-[width,background-color] duration-300 ${
                       i === page
-                        ? "w-6 bg-foreground"
-                        : "w-1.5 bg-muted-foreground/40"
+                        ? "bg-foreground w-6"
+                        : "bg-muted-foreground/40 w-1.5"
                     }`}
                   />
                 ))}
@@ -226,8 +207,8 @@ export function Showcase(): ReactNode {
                 type="button"
                 onClick={() => scrollByCards(1)}
                 disabled={page >= pageCount - 1}
-                aria-label="Next card"
-                className="focus-ring inline-flex h-8 w-8 items-center justify-center rounded-full bg-muted text-foreground transition-opacity hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-30"
+                aria-label={a11y.nextCard}
+                className="focus-ring bg-muted text-foreground inline-flex h-8 w-8 items-center justify-center rounded-full transition-opacity hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-30"
               >
                 <ChevronRight className="h-4 w-4" aria-hidden="true" />
               </button>
@@ -241,6 +222,7 @@ export function Showcase(): ReactNode {
               key="expanded"
               card={activeCard}
               onClose={closeCard}
+              a11y={a11y}
             />
           ) : null}
         </AnimatePresence>
@@ -259,7 +241,7 @@ function Card({
   hidden: boolean;
   onClick: () => void;
 }): ReactNode {
-  const { Icon } = card;
+  const Icon = ICONS[card.id] ?? Sparkles;
   return (
     <motion.button
       type="button"
@@ -268,12 +250,12 @@ function Card({
       layoutId={`card-${card.id}`}
       transition={MORPH_TRANSITION}
       style={{ visibility: hidden ? "hidden" : "visible" }}
-      className="focus-ring group relative flex aspect-[3/4] w-[280px] shrink-0 cursor-pointer snap-center flex-col justify-between rounded-2xl bg-muted p-6 text-left sm:w-[320px] sm:p-7 lg:w-[360px] lg:p-8"
+      className="focus-ring group bg-muted relative flex aspect-[3/4] w-[280px] shrink-0 cursor-pointer snap-center flex-col justify-between rounded-2xl p-6 text-left sm:w-[320px] sm:p-7 lg:w-[360px] lg:p-8"
     >
       <motion.div
         layoutId={`card-icon-${card.id}`}
         transition={MORPH_TRANSITION}
-        className="flex h-11 w-11 items-center justify-center rounded-full bg-background/60 text-foreground"
+        className="bg-background/60 text-foreground flex h-11 w-11 items-center justify-center rounded-full"
       >
         <Icon className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
       </motion.div>
@@ -281,7 +263,7 @@ function Card({
         <motion.h3
           layoutId={`card-title-${card.id}`}
           transition={MORPH_TRANSITION}
-          className="whitespace-pre-line text-xl font-medium leading-tight tracking-tight text-foreground sm:text-2xl"
+          className="text-foreground text-xl leading-tight font-medium tracking-tight whitespace-pre-line sm:text-2xl"
         >
           {card.title}
         </motion.h3>
@@ -289,7 +271,7 @@ function Card({
           layoutId={`card-plus-${card.id}`}
           aria-hidden="true"
           transition={MORPH_TRANSITION}
-          className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-background/60 text-foreground"
+          className="bg-background/60 text-foreground inline-flex h-9 w-9 items-center justify-center rounded-full"
         >
           <motion.span
             className="inline-flex"
@@ -307,11 +289,13 @@ function Card({
 function ExpandedCard({
   card,
   onClose,
+  a11y,
 }: {
+  a11y: A11y;
   card: ShowcaseCard;
   onClose: () => void;
 }): ReactNode {
-  const { Icon } = card;
+  const Icon = ICONS[card.id] ?? Sparkles;
   const dialogRef = useRef<HTMLDivElement>(null);
   const titleId = useId();
   useEffect(() => {
@@ -333,25 +317,25 @@ function ExpandedCard({
     >
       <motion.button
         type="button"
-        aria-label="Close"
+        aria-label={a11y.close}
         tabIndex={-1}
         onClick={onClose}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-        className="absolute inset-0 cursor-default bg-background/60 backdrop-blur-xl"
+        className="bg-background/60 absolute inset-0 cursor-default backdrop-blur-xl"
       />
 
       <motion.div
         layoutId={`card-${card.id}`}
         transition={MORPH_TRANSITION}
-        className="relative z-10 flex max-h-[calc(100dvh-3rem)] w-full max-w-[420px] flex-col justify-between overflow-y-auto overscroll-contain rounded-2xl bg-muted p-8 sm:max-h-[calc(100dvh-5rem)] sm:max-w-2xl sm:p-10 lg:p-12"
+        className="bg-muted relative z-10 flex max-h-[calc(100dvh-3rem)] w-full max-w-[420px] flex-col justify-between overflow-y-auto overscroll-contain rounded-2xl p-8 sm:max-h-[calc(100dvh-5rem)] sm:max-w-2xl sm:p-10 lg:p-12"
       >
         <motion.div
           layoutId={`card-icon-${card.id}`}
           transition={MORPH_TRANSITION}
-          className="flex h-11 w-11 items-center justify-center rounded-full bg-background/60 text-foreground"
+          className="bg-background/60 text-foreground flex h-11 w-11 items-center justify-center rounded-full"
         >
           <Icon className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
         </motion.div>
@@ -361,7 +345,7 @@ function ExpandedCard({
             id={titleId}
             layoutId={`card-title-${card.id}`}
             transition={MORPH_TRANSITION}
-            className="whitespace-pre-line text-2xl font-medium leading-tight tracking-tight text-foreground sm:text-3xl lg:text-4xl"
+            className="text-foreground text-2xl leading-tight font-medium tracking-tight whitespace-pre-line sm:text-3xl lg:text-4xl"
           >
             {card.title}
           </motion.h3>
@@ -374,7 +358,7 @@ function ExpandedCard({
               delay: 0.18,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="max-w-prose text-sm leading-relaxed text-muted-foreground sm:text-base"
+            className="text-muted-foreground max-w-prose text-sm leading-relaxed sm:text-base"
           >
             {card.body}
           </motion.p>
@@ -384,8 +368,8 @@ function ExpandedCard({
             onClick={onClose}
             layoutId={`card-plus-${card.id}`}
             transition={MORPH_TRANSITION}
-            aria-label="Close card"
-            className="focus-ring inline-flex h-9 w-9 items-center justify-center rounded-full bg-background/60 text-foreground transition-opacity hover:opacity-80"
+            aria-label={a11y.closeCard}
+            className="focus-ring bg-background/60 text-foreground inline-flex h-9 w-9 items-center justify-center rounded-full transition-opacity hover:opacity-80"
           >
             <motion.span
               className="inline-flex"
